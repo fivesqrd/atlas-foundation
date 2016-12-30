@@ -1,0 +1,19 @@
+{
+	"name": "five/atlas",
+	"description": "Simple Data Mapper Library",
+	"require": {
+        "zendframework/zend-db": "^3.0.2"
+    },
+    "autoload": {
+        "classmap": ["src/Atlas"]
+    },
+    "version": "1.0.0",
+    "license": ["Five  License"],
+    "authors": [
+        {
+            "name": "Christian Burger",
+            "email": "christian@fivesqrd.com",
+            "role": "Developer"
+        }
+    ]
+}
