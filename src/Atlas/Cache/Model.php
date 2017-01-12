@@ -47,7 +47,7 @@ class Atlas_Cache_Model
     {
         $key = $this->_generateKey($table, $id);
         
-        $record = $this->_load($key);
+        $record = $this->_get($key);
     
         if ($record === false) {
             $record = $this->_save($key, $select->query()->fetch());
@@ -66,7 +66,7 @@ class Atlas_Cache_Model
         return $record;
     }
     
-    protected function _load($key)
+    protected function _get($key)
     {
         if (self::$disabled === true) {
             return false;

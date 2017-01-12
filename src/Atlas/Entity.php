@@ -1,4 +1,5 @@
 <?php
+namespace Atlas;
 /**
  *
  * Think Framework
@@ -12,38 +13,13 @@
  * 
  * @copyright  Copyright (c) 2012 Click Science, Think Open Software (Pty) Limted.
  */
-abstract class Atlas_Model_Entity implements Atlas_Observable
+abstract class Entity implements Observable
 {
     protected $_id;
     
     private $__startingValues = array();
     
     private $__observers = array();
-    
-    public function getId($masked = false)
-    {
-        return ($masked) ? $this->_mask($this->_id) : $this->_id;
-    }
-
-    protected function _mask($value)
-    {
-        $maskClass = 'Atlas_Mask_' . ucfirst(Atlas_Model_Mapper::$mask);
-        if (class_exists($maskClass)) {
-            $mask = new $maskClass();
-        } else {
-            throw new Exception($maskClass . ' could not be found');
-        }
-        return $mask->encode($value);
-    }
-    
-    public function setId($value)
-    {
-        if ($this->_id !== null) {
-            throw new Exception ('Model ID may not be overwritten');
-        }
-        
-        $this->_id = $value;
-    }
     
     public function __construct($properties = array())
     {
@@ -52,6 +28,34 @@ abstract class Atlas_Model_Entity implements Atlas_Observable
         }
         
         $this->__startingValues = $this->toArray();
+    }
+    
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    public function setId($value)
+    {
+        if ($this->_id !== null) {
+            throw new Exception ('Model ID may not be overwritten');
+        }
+        
+        $this->_id = $value;
+    }
+
+    public function set($property, $value)
+    {
+        $this->{$property} = $value;
+    }
+
+    public function get($property)
+    {
+        if (!isset($this->{$property}) {
+            throw new \Exception("Property {$property} does not exist for " . get_class($this));
+        }
+
+        return $this->{$property};
     }
     
     public function diff()
@@ -93,7 +97,7 @@ abstract class Atlas_Model_Entity implements Atlas_Observable
     /**
      * @param array|Atlas_Model_Entity $observers
      */
-    public function attachObserver($observers)
+    public function attach($observers)
     {
         if (is_array($observers)) {
             foreach ($observers as $observer) {
@@ -104,6 +108,11 @@ abstract class Atlas_Model_Entity implements Atlas_Observable
             $class = get_class($observer);
             $this->__observers[$class] = $observer;
         }
+    }
+
+    public function getObservers()
+    {
+        return $this->__observers;
     }
     
     /**
@@ -120,20 +129,13 @@ abstract class Atlas_Model_Entity implements Atlas_Observable
         return $this->__observers[$name];
     }
     
-    public function detachObserver(Atlas_Observer $spec)
+    public function detach(Atlas_Observer $spec)
     {
         foreach ($this->__observers as $key => $observer)
         {
             if ($observer == $spec) unset($this->__observers[$key]);
         }
         return $this;
-    }
-    
-    public function notifyObservers($action)
-    {
-        foreach ($this->__observers as $observer) {
-            $observer->update($this, $action);
-        }
     }
     
     public function toArray()
@@ -151,16 +153,6 @@ abstract class Atlas_Model_Entity implements Atlas_Observable
         }
     
         return $vars;
-    }
-    
-    public function save()
-    {
-        $this->mapper()->save($this);
-    }
-    
-    public function delete()
-    {
-        $this->mapper()->delete($this);
     }
     
     public function __clone()

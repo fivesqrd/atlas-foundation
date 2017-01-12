@@ -16,8 +16,6 @@ namespace Atlas;
 
 abstract class Mapper
 {
-    protected $_db;
-    
     protected $_alias;
 
     protected $_table;
@@ -28,22 +26,15 @@ abstract class Mapper
 
     protected $_mapReadOnly = array();
     
-    public static $mask = 'base36';
-    
-    abstract public function createObject($row);
-    
-    /**
-     * @return Zend_Db_Adapter_Pdo_Mysql $db
-     */
-    public function db()
-    {
-        if ($this->_db === null) {
-            $this->_db = Atlas_Db::getInstance()->getAdapter();
-        }
-    
-        return $this->_db;
-    }
+    abstract public function getObject($row);
 
+    abstract public function getCollection($rows);
+
+    public function getRow($entity)
+    {
+        return $this->_extract($entity);
+    }
+    
     public function getAlias()
     {
         return $this->_alias;
@@ -53,66 +44,10 @@ abstract class Mapper
     {
         return $this->_table;
     }
-    
-    /**
-     * @return Zend_Db_Select
-     */
-    public function select()
+
+    public function getKey()
     {
-        return $this->db()->select();
-    }
-    
-    /**
-     *
-     * @param int $primarykey
-     * @return Atlas_Model
-     */
-    protected function _fetch($key)
-    {
-        if (empty($key)) {
-            throw new Exception('Cannot fetch record from ' . $this->_table . '. No primary key provided');
-        }
-        
-        $select = $this->db()->select()
-            ->from($this->_table)
-            ->where($this->_key . ' = ?', $key);
-        
-        $record = Atlas_Cache_Model::getInstance()
-            ->fetch($this->_table, $key, $select);
-        
-        return $this->createObject($record);
-    }
-    
-    /**
-     * @param string $table
-     * @param array $data
-     * @param Atlas_Model_Entity $model
-     * @param string $pkField
-     */
-    protected function _save($data, $model)
-    {
-        if ($model->getId() !== null)
-        {
-            $this->db()->update($this->_table, $data, $this->_key . ' = ' . $this->db()->quote($model->getId()));
-            $model->notifyObservers('change');
-        } else {
-            $this->db()->insert($this->_table);
-            $key = $this->db()->lastInsertId();
-            $model->setId($key);
-            $model->notifyObservers('create');
-        }
-        return $model->getId();
-    }
-    
-    /**
-     * @param string $table
-     * @param Atlas_Model_Entity $model
-     * @param string $pkField
-     */
-    protected function _delete($model)
-    {
-        $this->db()->delete($this->_table,$this->_key . ' = ' . $this->db()->quote($model->getId()));
-        $model->notifyObservers('delete');
+        return $this->_key;
     }
     
     /**

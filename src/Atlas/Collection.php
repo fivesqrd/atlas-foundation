@@ -65,7 +65,7 @@ abstract class Atlas_Model_Collection implements Iterator, Countable
 		}
 
 		if (isset($this->_raw[$no])) {
-			$this->_objects[$no] = $this->_mapper->createObject($this->_raw[$no]);
+			$this->_objects[$no] = $this->_mapper->getObject($this->_raw[$no]);
 			if (!isset($this->_objects[$no])) {
 			    throw new Exception('Collection could not create object for class ' . $this->targetClass());
 			}

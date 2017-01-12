@@ -1,25 +1,18 @@
 <?php
-abstract class Atlas_Model_Observer implements Atlas_Observer
+namespace Atlas;
+
+abstract class Observer
 {
-    /**
-     * @var Atlas_Model
-     */
-    protected $_model;
-    
     protected $_params = array();
     
     /**
      * Method called for each property that have changed
-     * 
-     * @param string $property
-     * @param mixed $before
-     * @param mixed $after
      */
-    abstract protected function _changeHook($property, $before, $after);
+    abstract protected function _onUpdate($entity, $delta);
     
-    abstract protected function _deleteHook();
+    abstract protected function _onDelete($entity);
     
-    abstract protected function _createHook();
+    abstract protected function _onCreate($entity);
     
     public function setParam($key, $value)
     {
@@ -34,23 +27,33 @@ abstract class Atlas_Model_Observer implements Atlas_Observer
         }
     }
     
-    public function update(Atlas_Observable $subject, $action = 'change')
+    public function notify($entity, $action = 'change')
     {
-        $this->_model = $subject;
-        $after = $this->_model->toArray();
         switch ($action) {
-            case 'change':
-                foreach ($subject->diff() as $key => $before) {
-                    $this->_changeHook($key, $before, $after[$key]);
-                }
+            case 'update':
+                $this->_onUpdate($entity, $this->_getDelta($entity));
                 break;
             case 'create':
-                $this->_createHook();
+                $this->_onCreate($entity);
                 break;
             case 'delete':
-                $this->_deleteHook();
+                $this->_onDelete($entity);
                 break;
         }
-        
+    }
+
+    protected function _getDelta($entity)
+    {
+        $after = $entity->toArray();
+        $delta = array();
+        foreach ($entity->diff() as $key => $before) {
+            array_push($delta, array(
+                'key'    => $key,
+                'before' => $before,
+                'after'  => $after[$key]
+            );
+        }
+
+        return $delta;
     }
 }
