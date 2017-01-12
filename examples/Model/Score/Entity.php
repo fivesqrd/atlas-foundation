@@ -21,16 +21,6 @@ class Entity extends \Atlas\Entity
         return new Relation($this);
     }
 
-    public function setMetric($value)
-    {
-        $this->_metric = $value;
-    }
-
-    public function getMetric()
-    {
-        return $this->_metric;
-    }
-
     public function setValue($value)
     {
         if ($value > 5) {
@@ -40,16 +30,6 @@ class Entity extends \Atlas\Entity
         $this->_value = $value;
     }
 
-    public function getValue()
-    {
-        return $this->_value;
-    }
-
-    public function setPeriod($value)
-    {
-        $this->_period = $value;
-    }
-
     public function getPeriod($format = null)
     {
         if ($format !== null) {
@@ -57,11 +37,6 @@ class Entity extends \Atlas\Entity
         }
 
         return $this->_period;
-    }
-
-    public function setTimestamp($value)
-    {
-        $this->_timestamp = $value;
     }
 
     public function getTimestamp($format = null)
