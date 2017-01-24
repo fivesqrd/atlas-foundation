@@ -40,31 +40,17 @@ abstract class Mapper
      * @param string $pkColumn
      * @return Atom_Model
      */
-    protected function _fetch($table, $primarykey, $masked = false, $pkColumn = 'id')
+    protected function _fetch($table, $primarykey, $pkColumn = 'id')
     {
         if (empty($primarykey)) {
             throw new Exception('Cannot fetch record from ' . $table . '. No primary key provided');
-        }
-        
-        if ($masked) {
-            $maskClass = 'Atom_Mask_' . ucfirst(self::$mask);
-            if (class_exists($maskClass)) {
-                $mask = new $maskClass();
-            } else {
-                throw new Exception($maskClass . ' could not be found');
-            }
-            
-            $primarykey = $mask->decode($primarykey);
         }
         
         $select = $this->db()->select()
             ->from($table)
             ->where($pkColumn . ' = ?', $primarykey);
         
-        $record = Atom_Cache_Model::getInstance()
-            ->fetch($table, $primarykey, $select);
-        
-        return $this->createObject($record);
+        return $this->createObject($select->query()->fetch());
     }
     
     /**
@@ -86,9 +72,6 @@ abstract class Mapper
             $model->notifyObservers('create');
         }
     
-        Atom_Cache_Model::getInstance()
-            ->delete($table, $model->getId());
-            
         return $model->getId();
     }
     
@@ -101,8 +84,6 @@ abstract class Mapper
     {
         $this->db()->delete($table,$pkField . ' = ' . $this->db()->quote($model->getId()));
         $model->notifyObservers('delete');
-        
-        Atom_Cache_Model::getInstance()->delete($table, $model->getId());
     }
     
     /**

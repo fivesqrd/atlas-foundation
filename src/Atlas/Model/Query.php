@@ -29,48 +29,6 @@ abstract class Query
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
     
-    protected function _joinModelCreateLog($class)
-    {
-        if (empty($class)) {
-            throw new Exception('Model class is required when using model logs');
-        }
-        
-        if (!$this->_isJoined('mcl')) {
-            $on = "mcl.object_key = {$this->_alias}.id and mcl.object_type = '{$class}'";
-            $this->_select->join(array('mcl' => '_model_create_log'), $on, null);
-        }
-    
-        return $this->_select;
-    }
-    
-    protected function _joinModelDeleteLog($class)
-    {
-        if (empty($class)) {
-            throw new Exception('Model class is required when using model logs');
-        }
-        
-        if (!$this->_isJoined('mdl')) {
-            $on = "mdl.object_key = {$this->_alias}.id and mdl.object_type = '{$class}";
-            $this->_select->join(array('mdl' => '_model_delete_log'), $on, null);
-        }
-    
-        return $this->_select;
-    }
-    
-    protected function _joinModelUpdateLog($class)
-    {
-        if (empty($class)) {
-            throw new Exception('Model class is required when using model logs');
-        }
-        
-        if (!$this->_isJoined('mul')) {
-            $on = "mul.object_key = {$this->_alias}.id and mul.object_type = '{$class}";
-            $this->_select->join(array('mul' => '_model_update_log'), $on, null);
-        }
-    
-        return $this->_select;
-    }
-    
     protected function _isJoined($alias)
     {
         $parts = $this->_select->getPart(Zend_Db_Select::FROM);
@@ -175,84 +133,6 @@ abstract class Query
     }
     
     /**
-     * @param string $class
-     * @param int $value
-     * @return Atom_Model_Query
-     */
-    protected function _createdBy($class, $value)
-    {
-        $this->_joinModelCreateLog($class)->where('mcl.user_id = ?', $value);
-        return $this;
-    }
-
-    /**
-     * @param string $class
-     * @param int $value
-     * @return Atom_Model_Query
-     */
-    protected function _updatedBy($class, $value)
-    {
-        $this->_joinModelUpdateLog($class)->where('mul.user_id = ?', $value);
-        return $this;
-    }
-    
-    /**
-     * @param int $value
-     * @return Atom_Model_Query
-     */
-    protected function _deletedBy($class, $value)
-    {
-        $this->_joinModelDeleteLog($class)->where('mdl.user_id = ?', $value);
-        return $this;
-    }
-    
-    /**
-     * @param string $class
-     * @param string $start
-     * @param string $end
-     * @return Atom_Model_Query
-     */
-    protected function _createdBetween($class, $start, $end)
-    {
-        $this->_joinModelCreateLog($class)
-            ->where('mcl.timestamp >= ?', $start)
-            ->where('mcl.timestamp <= ?', $end);
-        return $this;
-    }
-    
-    /**
-     * @param string $class
-     * @param string $start
-     * @param string $end
-     * @return Atom_Model_Query
-     */
-    protected function _updatedBetween($class, $start, $end)
-    {
-        $this->_joinModelUpdateLog($class)
-            ->where('mul.timestamp >= ?', $start)
-            ->where('mul.timestamp <= ?', $end);
-        return $this;
-    }
-    
-    /**
-     * @param Atom_Model_Filter $filter
-     * @return Atom_Model_Query
-     */
-    public function apply($filter)
-    {
-        foreach ($filter->getAll() as $element) {
-            foreach ($element->getConditions() as $function => $params) {
-                if (!method_exists($this, $function)) {
-                    throw new Exception('Invalid filter condition ' . get_class($this) . '::' . $function);
-                }
-                call_user_func_array(array($this, $function), $params);
-            }
-        }
-        
-        return $this;
-    }
-    
-    /**
      * @param int $count
      * @param int $offset
      * @return Atom_Model_Query
@@ -274,11 +154,10 @@ abstract class Query
             ->reset(Zend_Db_Select::LIMIT_OFFSET)
             ->reset(Zend_Db_Select::LIMIT_COUNT);
     
-        $select->distinct()
-            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('COUNT(distinct ' . $this->_alias . '.id)'));
-        
-        return Atom_Cache_Select::getInstance()
-            ->fetchColumn($select, null);
+        return $select->distinct()
+            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('COUNT(distinct ' . $this->_alias . '.id)'))
+            ->query()
+            ->fetchColumn();
     }
 
     /**
@@ -294,10 +173,9 @@ abstract class Query
             ->reset(Zend_Db_Select::LIMIT_COUNT);
     
         $select->distinct()
-            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('SUM(' . $this->_alias . '.' . $column . ')'));
-        
-        return Atom_Cache_Select::getInstance()
-            ->fetchColumn($select, null);
+            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('SUM(' . $this->_alias . '.' . $column . ')'))
+            ->query()
+            ->fetchColumn();
     }
     
     /**
@@ -306,7 +184,7 @@ abstract class Query
      * @link http://framework.zend.com/manual/1.12/en/zend.db.select.html#zend.db.select.building.order
      * @return Atom_Query
      */
-    public function sortBy($spec)
+    public function sort($spec)
     {
         $this->_select->order($spec);
         return $this;
@@ -330,10 +208,7 @@ abstract class Query
     {
         $select = $this->getSelect()->limitPage($currentPage, $itemsPerPage);
         
-        $records = Atom_Cache_Select::getInstance()
-            ->fetchAll($select, array());
-        
-        return $this->_createCollection($records, $this->_mapper);
+        return $this->_createCollection($select->query()->fetchAll(), $this->_mapper);
     }
     
     /**
@@ -341,10 +216,7 @@ abstract class Query
      */
     public function fetchOne()
     {
-        $record = Atom_Cache_Select::getInstance()
-            ->fetchOne($this->getSelect(), array());
-        
-        return $this->_mapper->createObject($record);
+        return $this->_mapper->createObject($select->query()->fetch());
     }
     
     /**
@@ -352,9 +224,6 @@ abstract class Query
      */
     public function fetchAll()
     {
-        $records = Atom_Cache_Select::getInstance()
-            ->fetchAll($this->getSelect(), array());
-        
-        return $this->_createCollection($records, $this->_mapper);
+        return $this->_createCollection($records->query()->fetchAll(), $this->_mapper);
     }
 }

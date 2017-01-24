@@ -9,22 +9,11 @@ abstract class Entity
     
     private $__observers = array();
     
-    public function getId($masked = false)
+    public function getId()
     {
-        return ($masked) ? $this->_mask($this->_id) : $this->_id;
+        return $this->_id;
     }
 
-    protected function _mask($value)
-    {
-        $maskClass = 'Atom_Mask_' . ucfirst(Atom_Model_Mapper::$mask);
-        if (class_exists($maskClass)) {
-            $mask = new $maskClass();
-        } else {
-            throw new Exception($maskClass . ' could not be found');
-        }
-        return $mask->encode($value);
-    }
-    
     public function setId($value)
     {
         if ($this->_id !== null) {
@@ -109,7 +98,7 @@ abstract class Entity
         return $this->__observers[$name];
     }
     
-    public function detachObserver(Atom_Observer $spec)
+    public function detachObserver($spec)
     {
         foreach ($this->__observers as $key => $observer)
         {
