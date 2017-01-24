@@ -19,7 +19,7 @@ abstract class Mapper
     public function db()
     {
         if ($this->_db === null) {
-            $this->_db = Atom_Db::getInstance()->getAdapter();
+            $this->_db = \Atlas\Db::getInstance()->getAdapter();
         }
     
         return $this->_db;
