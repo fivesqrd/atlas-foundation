@@ -207,7 +207,6 @@ abstract class Query
     public function fetchByPage($currentPage, $itemsPerPage)
     {
         $select = $this->getSelect()->limitPage($currentPage, $itemsPerPage);
-        
         return $this->_createCollection($select->query()->fetchAll(), $this->_mapper);
     }
     
@@ -216,7 +215,7 @@ abstract class Query
      */
     public function fetchOne()
     {
-        return $this->_mapper->createObject($select->query()->fetch());
+        return $this->_mapper->createObject($this->getSelect()->query()->fetch());
     }
     
     /**
@@ -224,6 +223,6 @@ abstract class Query
      */
     public function fetchAll()
     {
-        return $this->_createCollection($records->query()->fetchAll(), $this->_mapper);
+        return $this->_createCollection($this->getSelect()->query()->fetchAll(), $this->_mapper);
     }
 }
