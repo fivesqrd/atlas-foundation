@@ -1,9 +1,9 @@
 <?php
-namespace Application\Model\Score;
+namespace Model\Score;
 
-use Application\Model as Model;
+use Model;
 
-class Mapper extends \Atlas_Model_Mapper
+class Mapper extends \Atlas\Mapper
 {
     protected $_alias = 's';
 

@@ -12,4 +12,8 @@ class Score
     {
         return new Score\Query(self::mapper());
     }
+
+    public static function fetch($key)
+    {
+    }
 }

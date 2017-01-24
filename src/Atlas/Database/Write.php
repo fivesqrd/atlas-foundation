@@ -3,26 +3,18 @@ namespace Atlas\Database;
 
 class Write
 {
-    protected $_adapter;
+    protected $_provider;
 
     protected $_mapper;
 
     public function __construct($config)
     {
-        $this->_adapter = new \Zend_Db_Adapter_Pdo_Mysql($config);
+        $this->_provider = Provider::factory($config);
     }
 
     public function setMapper($object)
     {
         $this->_mapper = $object;
-    }
-
-    public function getAdapter()
-    {
-        if (!$this->_adapter) {
-            throw new Exception('Database adapter not connected');
-        }
-        return $this->_adapter;
     }
 
     /**
@@ -35,23 +27,53 @@ class Write
     {
         if ($model->getId() !== null)
         {
-            $this->getAdapter()->update(
-                $this->_mapper->getTable(), 
-                $this->_mapper->getRow($entity), 
-                $this->_where($entity->getId())
-            );
-            $this->_notify($entity, 'update');
+            $this->_update($entity);
         } else {
-            $this->getAdapter()->insert(
-                $this->_mapper->getTable(),
-                $this->_mapper->getRow($entity), 
-            );
-            $key = $this->getAdapter()->lastInsertId();
-            $entity->setId($key);
-            $this->_notify($entity, 'create');
+            $this->_insert($entity);
         }
 
         return $entity->getId();
+    }
+
+    protected function _insert($entity)
+    {
+        $key = $this->_provider->insert(
+            $this->_mapper->getTable(), 
+            $this->_mapper->getRow($entity)
+        )->execute();
+
+        $entity->setId($key);
+
+        $this->_notify($entity, 'create');
+
+        return $key;
+    }
+
+    protected function _update($entity)
+    {
+        $this->_provider->update(
+            $this->_mapper->getTable(), 
+            $this->_mapper->getRow($entity),
+            $this->_where($entity->getId())
+        )->execute();
+
+        $this->_notify($entity, 'update');
+    }
+    
+    /**
+     * @param string $table
+     * @param Atlas_Model_Entity $model
+     * @param string $pkField
+     */
+    public function delete($entity)
+    {
+        $result = $this->_provider
+            ->delete($this->_table, $this->_where($model->getId()))
+            ->execute();;
+
+        $model->_notify($entity, 'delete');
+
+        return $result;
     }
 
     protected function _notify($entity, $action)
@@ -63,17 +85,6 @@ class Write
 
     protected function _where($id)
     {
-        return $this->_mapper->getKey() . ' = ' . $this->getAdapter()->quote($id);
-    }
-    
-    /**
-     * @param string $table
-     * @param Atlas_Model_Entity $model
-     * @param string $pkField
-     */
-    public function delete($entity)
-    {
-        $this->getAdapter()->delete($this->_table, $this->_where($model->getId()));
-        $model->notifyObservers('delete');
+        return array($this->_mapper->getKey() => $id);
     }
 }

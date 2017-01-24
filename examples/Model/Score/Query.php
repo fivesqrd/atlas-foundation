@@ -5,11 +5,15 @@ class Query extends \Atlas\Query
 {
     public function metricIs($value)
     {
-        return $this->_equals('metric', $value);
+        $this->_select->where()
+            ->isEqual('metric', $value, $this->getAlias());
+        return $this;
     }
 
     public function periodIs($value)
     {
-        return $this->_equals('period', $value);
+        $this->_select->where()
+            ->isEqual('period', $value, $this->getAlias());
+        return $this;
     }
 }

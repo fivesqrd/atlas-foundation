@@ -13,7 +13,10 @@ namespace Atlas;
  * 
  * @copyright  Copyright (c) 2012 Click Science, Think Open Software (Pty) Limted.
  */
-abstract class Entity implements Observable
+
+use Atlas\Exception;
+
+abstract class Entity
 {
     protected $_id;
     
@@ -51,8 +54,12 @@ abstract class Entity implements Observable
 
     public function get($property)
     {
-        if (!isset($this->{$property}) {
-            throw new \Exception("Property {$property} does not exist for " . get_class($this));
+        if (!$property) {
+            throw new Exception("Property key is required to get value");
+        }
+
+        if (!property_exists($this, $property)) {
+            throw new Exception("Property '{$property}' does not exist for " . get_class($this));
         }
 
         return $this->{$property};

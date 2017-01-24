@@ -49,7 +49,7 @@ abstract class Mapper
     {
         return $this->_key;
     }
-    
+
     /**
      * @param array $row
      * @return array
