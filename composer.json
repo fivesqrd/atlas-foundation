@@ -1,8 +1,8 @@
 {
-	"name": "five/atlas",
+	"name": "click-science/atlas",
 	"description": "Simple Data Mapper Library",
 	"require": {
-        "zendframework/zend-db": "^3.0.2"
+        "zendframework/zendframework1": "^1.12"
     },
     "autoload": {
         "classmap": ["src/Atlas"]
@@ -12,7 +12,7 @@
     "authors": [
         {
             "name": "Christian Burger",
-            "email": "christian@fivesqrd.com",
+            "email": "christian@clickscience.co.za",
             "role": "Developer"
         }
     ]

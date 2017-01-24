@@ -1,20 +1,5 @@
 <?php
-namespace Atlas;
-/**
- *
- * Think Framework
- *
- * LICENSE
- *
- * This source file is subject to version 1.0 of the Think Framework
- * license. If you did not receive a copy of the Think Framework license, 
- * please send a note to support@thinkopen.biz so we can mail you a copy 
- * immediately
- * 
- * @copyright  Copyright (c) 2012 Click Science, Think Open Software (Pty) Limted.
- */
-
-use Atlas\Exception;
+namespace Atlas\Model;
 
 abstract class Entity
 {
@@ -24,20 +9,22 @@ abstract class Entity
     
     private $__observers = array();
     
-    public function __construct($properties = array())
+    public function getId($masked = false)
     {
-        foreach ($properties as $key => $value) {
-            $this->$key = $value;
-        }
-        
-        $this->__startingValues = $this->toArray();
-    }
-    
-    public function getId()
-    {
-        return $this->_id;
+        return ($masked) ? $this->_mask($this->_id) : $this->_id;
     }
 
+    protected function _mask($value)
+    {
+        $maskClass = 'Atom_Mask_' . ucfirst(Atom_Model_Mapper::$mask);
+        if (class_exists($maskClass)) {
+            $mask = new $maskClass();
+        } else {
+            throw new Exception($maskClass . ' could not be found');
+        }
+        return $mask->encode($value);
+    }
+    
     public function setId($value)
     {
         if ($this->_id !== null) {
@@ -46,23 +33,14 @@ abstract class Entity
         
         $this->_id = $value;
     }
-
-    public function set($property, $value)
+    
+    public function __construct($properties = array())
     {
-        $this->{$property} = $value;
-    }
-
-    public function get($property)
-    {
-        if (!$property) {
-            throw new Exception("Property key is required to get value");
+        foreach ($properties as $key => $value) {
+            $this->$key = $value;
         }
-
-        if (!property_exists($this, $property)) {
-            throw new Exception("Property '{$property}' does not exist for " . get_class($this));
-        }
-
-        return $this->{$property};
+        
+        $this->__startingValues = $this->toArray();
     }
     
     public function diff()
@@ -102,9 +80,9 @@ abstract class Entity
     }
     
     /**
-     * @param array|Atlas_Model_Entity $observers
+     * @param array|Atom_Model_Entity $observers
      */
-    public function attach($observers)
+    public function attachObserver($observers)
     {
         if (is_array($observers)) {
             foreach ($observers as $observer) {
@@ -116,16 +94,11 @@ abstract class Entity
             $this->__observers[$class] = $observer;
         }
     }
-
-    public function getObservers()
-    {
-        return $this->__observers;
-    }
     
     /**
      * @param string $name
      * @throws Exception
-     * @return Atlas_Model_Observer
+     * @return Atom_Model_Observer
      */
     public function getObserver($name)
     {
@@ -136,13 +109,20 @@ abstract class Entity
         return $this->__observers[$name];
     }
     
-    public function detach(Atlas_Observer $spec)
+    public function detachObserver(Atom_Observer $spec)
     {
         foreach ($this->__observers as $key => $observer)
         {
             if ($observer == $spec) unset($this->__observers[$key]);
         }
         return $this;
+    }
+    
+    public function notifyObservers($action)
+    {
+        foreach ($this->__observers as $observer) {
+            $observer->update($this, $action);
+        }
     }
     
     public function toArray()
@@ -160,6 +140,16 @@ abstract class Entity
         }
     
         return $vars;
+    }
+    
+    public function save()
+    {
+        $this->mapper()->save($this);
+    }
+    
+    public function delete()
+    {
+        $this->mapper()->delete($this);
     }
     
     public function __clone()

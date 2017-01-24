@@ -1,19 +1,7 @@
 <?php
-/**
- *
- * Think Framework
- *
- * LICENSE
- *
- * This source file is subject to version 1.0 of the Think Framework
- * license. If you did not receive a copy of the Think Framework license, 
- * please send a note to support@thinkopen.biz so we can mail you a copy 
- * immediately
- * 
- * @copyright  Copyright (c) 2012 Click Science, Think Open Software (Pty) Limted.
- */
+namespace Atlas\Model;
 
-abstract class Atlas_Model_Collection implements Iterator, Countable
+abstract class Collection implements Iterator, Countable
 {
 	protected $_mapper;
 	protected $_total = 0;
@@ -24,17 +12,12 @@ abstract class Atlas_Model_Collection implements Iterator, Countable
 	
 	abstract public function targetClass();
 	
-	static function createCollection($type)
-	{
-		return new Atlas_Model_Collection($type);
-	}
-	
 	public function count()
 	{
 		return $this->_total;
 	}
 	
-	public function add(Atlas_Model_Entity $object)
+	public function add(Entity $object)
 	{
 		$class = $this->targetClass();
 		if (! ($object instanceof $class)) {
@@ -45,7 +28,7 @@ abstract class Atlas_Model_Collection implements Iterator, Countable
 		$this->_total++;
 	}
 	
-	public function __construct($raw,Atlas_Model_Mapper $mapper)
+	public function __construct($raw, Mapper $mapper)
 	{
 		if ($raw && $mapper) {
 			$this->_raw = $raw;
@@ -65,7 +48,7 @@ abstract class Atlas_Model_Collection implements Iterator, Countable
 		}
 
 		if (isset($this->_raw[$no])) {
-			$this->_objects[$no] = $this->_mapper->getObject($this->_raw[$no]);
+			$this->_objects[$no] = $this->_mapper->createObject($this->_raw[$no]);
 			if (!isset($this->_objects[$no])) {
 			    throw new Exception('Collection could not create object for class ' . $this->targetClass());
 			}

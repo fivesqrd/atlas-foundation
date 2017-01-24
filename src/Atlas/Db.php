@@ -1,5 +1,7 @@
 <?php
-class Atlas_Db
+namespace Atlas;
+
+class Db
 {
     private static $instance;
 
