@@ -2,12 +2,11 @@
 	"name": "five/atlas",
 	"description": "Simple Data Mapper Library",
 	"require": {
-        "zendframework/zend-db": "^3.0.2"
     },
     "autoload": {
         "classmap": ["src/Atlas"]
     },
-    "version": "1.0.0",
+    "version": "2.0.0",
     "license": ["Five  License"],
     "authors": [
         {
