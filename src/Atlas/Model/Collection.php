@@ -1,7 +1,7 @@
 <?php
 namespace Atlas\Model;
 
-abstract class Collection implements Iterator, Countable
+abstract class Collection implements \Iterator, \Countable
 {
 	protected $_mapper;
 	protected $_total = 0;
