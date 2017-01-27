@@ -35,7 +35,7 @@ abstract class Query
     
     protected function _createCollection($rows)
     {
-        return new Collection($rows, $this->_mapper);
+        return $this->_mapper->createCollection($rows);
     }
     
     protected function _isJoined($alias)

@@ -17,6 +17,8 @@ abstract class Mapper
     
     abstract public function createObject($row);
 
+    abstract public function createCollection($rows);
+
     public function getAlias()
     {
         return $this->_alias;

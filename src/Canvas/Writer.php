@@ -45,7 +45,7 @@ class Writer
         $string = null;
 
         foreach ($methods as $method) {
-            $string .= "\n\t" . str_replace("\n","\n\t", $method);
+            $string .= "\n\n\t" . str_replace("\n","\n\t", $method);
         }
 
         return $string;

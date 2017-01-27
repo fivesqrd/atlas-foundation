@@ -43,6 +43,7 @@ class Mapper
     {
         return array(
             $this->_getCreateObject(),
+            $this->_getCreateCollection(),
         );
     }
 
@@ -50,7 +51,15 @@ class Mapper
     {
         return "public function createObject(\$row)"
             . "\n{"
-            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Entity(\$this->_populate(\$row));"
-            . "\n}\n";
+            . "\n\treturn new Entity(\$this->_populate(\$row);"
+            . "\n}";
+    }
+
+    protected function _getCreateCollection()
+    {
+        return "public function createCollection(\$rows)"
+            . "\n{"
+            . "\n\treturn new Collection(\$rows);"
+            . "\n}";
     }
 }

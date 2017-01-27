@@ -13,14 +13,13 @@ class Mapper extends \Atlas\Model\Mapper
 
 	protected $_readOnly = array('id');
 
-	public function getObject($row)
+	public function createObject($row)
 	{
-		return new \Model\User\Entity($rows);
+		return new Entity($this->_populate($row);
 	}
-	
-	public function getCollection($rows)
+
+	public function createCollection($rows)
 	{
-		return new \Model\User\Collection($rows);
+		return new Collection($rows);
 	}
-	
 }
