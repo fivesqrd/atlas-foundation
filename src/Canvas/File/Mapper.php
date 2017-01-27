@@ -42,24 +42,16 @@ class Mapper
     public function getMethods()
     {
         return array(
-            $this->_getObject(),
+            $this->_getCreateObject(),
             $this->_getCollection(),
         );
     }
 
-    protected function _getObject()
+    protected function _getCreateObject()
     {
-        return "public function getObject(\$row)"
+        return "public function createObject(\$row)"
             . "\n{"
-            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Entity(\$rows);"
-            . "\n}\n";
-    }
-
-    protected function _getCollection()
-    {
-        return "public function getCollection(\$rows)"
-            . "\n{"
-            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Collection(\$rows);"
+            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Entity(\$row);"
             . "\n}\n";
     }
 }

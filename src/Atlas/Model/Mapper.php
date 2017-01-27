@@ -4,6 +4,10 @@ namespace Atlas\Model;
 abstract class Mapper
 {
     protected $_db;
+
+    protected $_alias;
+
+    protected $_table;
     
     protected $_map = array();
     
@@ -12,6 +16,16 @@ abstract class Mapper
     public static $mask = 'base36';
     
     abstract public function createObject($row);
+
+    public function getAlias()
+    {
+        return $this->_alias;
+    }
+
+    public function getTable()
+    {
+        return $this->_table;
+    }
     
     /**
      * @return Zend_Db_Adapter_Pdo_Mysql $db
@@ -24,13 +38,28 @@ abstract class Mapper
     
         return $this->_db;
     }
-    
+
     /**
      * @return Zend_Db_Select
      */
     public function select()
     {
         return $this->db()->select();
+    }
+
+    public function save($entity)
+    {
+        return $this->_save($this->_table, $this->_extract($entity), $entity);
+    }
+    
+    public function fetch($id)
+    {
+        return $this->_fetch($this->_table, $id);
+    }
+
+    public function delete($model)
+    {
+        return $this->_delete($this->_table, $model);
     }
     
     /**

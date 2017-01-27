@@ -20,13 +20,16 @@ abstract class Query
     
     protected $_ignoreEmptyValues = false;
     
-    abstract protected function _createCollection($rows, $mapper);
-    
     public function __construct($mapper, $ignoreEmptyValues = false)
     {
         $this->_select = $mapper->db()->select();
         $this->_mapper = $mapper;
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
+    }
+    
+    protected function _createCollection($rows)
+    {
+        return new Collection($rows, $this->_mapper);
     }
     
     protected function _isJoined($alias)
@@ -207,7 +210,7 @@ abstract class Query
     public function fetchByPage($currentPage, $itemsPerPage)
     {
         $select = $this->getSelect()->limitPage($currentPage, $itemsPerPage);
-        return $this->_createCollection($select->query()->fetchAll(), $this->_mapper);
+        return $this->_createCollection($select->query()->fetchAll());
     }
     
     /**
@@ -223,6 +226,6 @@ abstract class Query
      */
     public function fetchAll()
     {
-        return $this->_createCollection($this->getSelect()->query()->fetchAll(), $this->_mapper);
+        return $this->_createCollection($this->getSelect()->query()->fetchAll());
     }
 }
