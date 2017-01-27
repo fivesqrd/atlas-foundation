@@ -20,7 +20,7 @@ class Model
 
     public function getClass()
     {
-        return ucfirst($model);
+        return ucfirst($this->_model);
     }
 
     public function getNamespace()
