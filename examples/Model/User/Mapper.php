@@ -1,7 +1,7 @@
 <?php
 namespace Model\User;
 
-class Mapper extends \Atlas\Model\Mapper
+class Mapper extends \Atlas\Mapper
 {
 	protected $_alias = null;
 
@@ -14,7 +14,6 @@ class Mapper extends \Atlas\Model\Mapper
 	);
 
 	protected $_readOnly = array('id');
-
 
 	public function createObject($row)
 	{

@@ -20,7 +20,7 @@ class Collection
 
     public function getClass()
     {
-        return 'Collection extends \Atlas\Model\Collection';
+        return 'Collection extends \Atlas\Collection';
     }
 
     public function getNamespace()
@@ -36,16 +36,16 @@ class Collection
     public function getMethods()
     {
         return array(
-            $this->_getTargetClass()
+            $this->_createGetTargetClass()
         );
     }
 
-    protected function _getTargetClass()
+    protected function _createGetTargetClass()
     {
         $path = '\\' . $this->_namespace . '\\' . $this->_model;
         $class = str_replace('\\','\\\\', $path);
 
-        return "public function targetClass()"
+        return "public function getTargetClass()"
             . "\n{"
             . "\n\treturn '{$class}';"
             . "\n}\n";

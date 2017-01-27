@@ -51,9 +51,9 @@ class Model
 
     protected function _getQuery()
     {
-        return "public function query()"
+        return "public function query(\$adapter)"
             . "\n{"
-            . "\n\treturn new {$this->_model}\\Query(self::mapper());"
+            . "\n\treturn new {$this->_model}\\Query(\$adapter);"
             . "\n}\n";
     }
 }

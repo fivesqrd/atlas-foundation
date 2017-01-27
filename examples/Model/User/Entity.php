@@ -1,6 +1,6 @@
 <?php
 namespace Model\User;
 
-class Entity extends \Atlas\Model\Entity
+class Entity extends \Atlas\Entity
 {
 }

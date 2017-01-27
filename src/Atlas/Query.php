@@ -1,7 +1,5 @@
 <?php
-namespace Atlas\Model;
-
-use Atlas\Exception as Exception;
+namespace Atlas;
 
 abstract class Query
 {
@@ -18,10 +16,10 @@ abstract class Query
     
     protected $_ignoreEmptyValues = false;
     
-    public function __construct($mapper, $ignoreEmptyValues = false)
+    public function __construct($db, $ignoreEmptyValues = false)
     {
-        $this->_select = $mapper->db()->select();
-        $this->_mapper = $mapper;
+        $this->_mapper = $db->getMapper();
+        $this->_select = $db->select();
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
 
@@ -33,11 +31,6 @@ abstract class Query
     protected function _getAlias()
     {
         return $this->_mapper->getAlias();
-    }
-    
-    protected function _createCollection($rows)
-    {
-        return $this->_mapper->createCollection($rows);
     }
     
     protected function _isJoined($alias)
@@ -207,7 +200,10 @@ abstract class Query
     public function getSelect()
     {
         $select = clone $this->_select;
-        return $select->distinct()->from(array($this->_getAlias() => $this->_getTable()));
+
+        return $select->distinct()->from(
+            array($this->_getAlias() => $this->_getTable())
+        );
     }
     
     /**
@@ -218,7 +214,9 @@ abstract class Query
     public function fetchByPage($currentPage, $itemsPerPage)
     {
         $select = $this->getSelect()->limitPage($currentPage, $itemsPerPage);
-        return $this->_createCollection($select->query()->fetchAll());
+        return $this->_mapper->getCollection(
+            $select->query()->fetchAll()
+        );
     }
     
     /**
@@ -226,7 +224,9 @@ abstract class Query
      */
     public function fetchOne()
     {
-        return $this->_mapper->createObject($this->getSelect()->query()->fetch());
+        return $this->_mapper->getEntity(
+            $this->getSelect()->query()->fetch()
+        );
     }
     
     /**
@@ -234,6 +234,8 @@ abstract class Query
      */
     public function fetchAll()
     {
-        return $this->_createCollection($this->getSelect()->query()->fetchAll());
+        return $this->_mapper->getCollection(
+            $this->getSelect()->query()->fetchAll()
+        );
     }
 }

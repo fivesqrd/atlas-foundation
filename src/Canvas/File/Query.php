@@ -20,7 +20,7 @@ class Query
 
     public function getClass()
     {
-        return 'Query extends \Atlas\Model\Query';
+        return 'Query extends \Atlas\Query';
     }
 
     public function getNamespace()

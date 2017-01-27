@@ -1,7 +1,5 @@
 <?php
-namespace Atlas\Model;
-
-use Atlas\Exception as Exception;
+namespace Atlas;
 
 abstract class Entity
 {
@@ -10,6 +8,17 @@ abstract class Entity
     private $__startingValues = array();
     
     private $__observers = array();
+
+    abstract public function factory();
+    
+    public function __construct($properties = array())
+    {
+        foreach ($properties as $key => $value) {
+            $this->$key = $value;
+        }
+        
+        $this->__startingValues = $this->toArray();
+    }
     
     public function getId()
     {
@@ -24,14 +33,23 @@ abstract class Entity
         
         $this->_id = $value;
     }
-    
-    public function __construct($properties = array())
+
+    public function get($property)
     {
-        foreach ($properties as $key => $value) {
-            $this->$key = $value;
+        if (!$property) {
+            throw new Exception("Property key is required to get value");
         }
-        
-        $this->__startingValues = $this->toArray();
+
+        if (!property_exists($this, $property)) {
+            throw new Exception("Property '{$property}' does not exist for " . get_class($this));
+        }
+
+        return $this->{$property};
+    }
+
+    public function set($property, $value)
+    {
+        $this->{$property} = $value;
     }
     
     public function diff()
@@ -109,7 +127,7 @@ abstract class Entity
         return $this;
     }
     
-    public function notifyObservers($action)
+    public function notify($action)
     {
         foreach ($this->__observers as $observer) {
             $observer->update($this, $action);

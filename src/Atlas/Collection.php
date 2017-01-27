@@ -1,7 +1,5 @@
 <?php
-namespace Atlas\Model;
-
-use Atlas\Exception as Exception;
+namespace Atlas;
 
 abstract class Collection implements \Iterator, \Countable
 {
@@ -12,7 +10,7 @@ abstract class Collection implements \Iterator, \Countable
 	private $_objects = array();
 	private $_pointer = 0;
 	
-	abstract public function targetClass();
+	abstract public function getTargetClass();
 	
 	public function count()
 	{
@@ -21,7 +19,7 @@ abstract class Collection implements \Iterator, \Countable
 	
 	public function add(Entity $object)
 	{
-		$class = $this->targetClass();
+		$class = $this->getTargetClass();
 		if (! ($object instanceof $class)) {
 			throw new Exception("This is a {$class} collection");
 		}
@@ -50,9 +48,9 @@ abstract class Collection implements \Iterator, \Countable
 		}
 
 		if (isset($this->_raw[$no])) {
-			$this->_objects[$no] = $this->_mapper->createObject($this->_raw[$no]);
+			$this->_objects[$no] = $this->_mapper->getEntity($this->_raw[$no]);
 			if (!isset($this->_objects[$no])) {
-			    throw new Exception('Collection could not create object for class ' . $this->targetClass());
+			    throw new Exception('Collection could not create object for class ' . $this->getTargetClass());
 			}
 			return $this->_objects[$no];
 		}

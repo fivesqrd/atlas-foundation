@@ -1,7 +1,7 @@
 <?php
 namespace Model;
 
-class 
+class User
 {
 
 	public function mapper()

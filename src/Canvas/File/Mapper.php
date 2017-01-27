@@ -20,7 +20,7 @@ class Mapper
 
     public function getClass()
     {
-        return 'Mapper extends \Atlas\Model\Mapper';
+        return 'Mapper extends \Atlas\Mapper';
     }
 
     public function getNamespace()
@@ -42,22 +42,22 @@ class Mapper
     public function getMethods()
     {
         return array(
-            $this->_getCreateObject(),
-            $this->_getCreateCollection(),
+            $this->_createGetEntity(),
+            $this->_createGetCollection(),
         );
     }
 
-    protected function _getCreateObject()
+    protected function _createGetEntity()
     {
-        return "public function createObject(\$row)"
+        return "public function getEntity(\$row)"
             . "\n{"
             . "\n\treturn new Entity(\$this->_populate(\$row);"
             . "\n}";
     }
 
-    protected function _getCreateCollection()
+    protected function _createGetCollection()
     {
-        return "public function createCollection(\$rows)"
+        return "public function getCollection(\$rows)"
             . "\n{"
             . "\n\treturn new Collection(\$rows);"
             . "\n}";

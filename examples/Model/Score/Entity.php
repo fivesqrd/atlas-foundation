@@ -11,6 +11,11 @@ class Entity extends \Atlas\Entity
 
     protected $_timestamp;
 
+    public function factory()
+    {
+        return new \Model\Score();
+    }
+
     public function presenter()
     {
         return new Presenter($this);

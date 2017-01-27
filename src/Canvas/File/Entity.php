@@ -20,7 +20,7 @@ class Entity
 
     public function getClass()
     {
-        return 'Entity extends \Atlas\Model\Entity';
+        return 'Entity extends \Atlas\Entity';
     }
 
     public function getNamespace()

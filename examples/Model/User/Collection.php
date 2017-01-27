@@ -1,7 +1,7 @@
 <?php
 namespace Model\User;
 
-class Collection extends \Atlas\Model\Collection
+class Collection extends \Atlas\Collection
 {
 
 	public function targetClass()

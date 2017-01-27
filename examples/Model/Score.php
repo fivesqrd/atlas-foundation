@@ -8,12 +8,8 @@ class Score
         return new Score\Mapper();
     }
 
-    public static function query()
+    public static function query($adapter)
     {
-        return new Score\Query(self::mapper());
-    }
-
-    public static function fetch($key)
-    {
+        return new Score\Query($adapter);
     }
 }
