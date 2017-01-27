@@ -43,7 +43,6 @@ class Mapper
     {
         return array(
             $this->_getCreateObject(),
-            $this->_getCollection(),
         );
     }
 
