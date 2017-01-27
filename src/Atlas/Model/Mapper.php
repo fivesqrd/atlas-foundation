@@ -1,6 +1,8 @@
 <?php
 namespace Atlas\Model;
 
+use Atlas\Exception as Exception;
+
 abstract class Mapper
 {
     protected $_db;
