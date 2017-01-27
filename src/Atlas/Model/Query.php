@@ -3,16 +3,12 @@ namespace Atlas\Model;
 
 abstract class Query
 {
-    protected $_alias;
-    
     /**
      * @var Zend_Db_Select
      */
     protected $_select;
     
     protected $_mapper;
-    
-    protected $_table;
     
     protected $_collectionClass;
     
@@ -26,6 +22,16 @@ abstract class Query
         $this->_mapper = $mapper;
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
+
+    protected function _getTable()
+    {
+        return $this->_mapper->getTable();
+    }
+
+    protected function _getAlias()
+    {
+        return $this->_mapper->getAlias();
+    }
     
     protected function _createCollection($rows)
     {
@@ -35,7 +41,7 @@ abstract class Query
     protected function _isJoined($alias)
     {
         $parts = $this->_select->getPart(Zend_Db_Select::FROM);
-        return (array_key_exists($alias, $parts) || $alias == $this->_alias);    
+        return (array_key_exists($alias, $parts) || $alias == $this->_getAlias());    
     }
     
     protected function _isEmpty($value)
@@ -48,7 +54,7 @@ abstract class Query
     private function _col($name, $operator, $placeholder = '?', $alias = null)
     {
         if ($alias == null) {
-            $alias = $this->_alias;
+            $alias = $this->_getAlias();
         }
         return $alias . '.' . $name . ' ' . $operator . ' ' . $placeholder;
     }
@@ -158,7 +164,7 @@ abstract class Query
             ->reset(Zend_Db_Select::LIMIT_COUNT);
     
         return $select->distinct()
-            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('COUNT(distinct ' . $this->_alias . '.id)'))
+            ->from(array($this->_getAlias() => $this->_getTable()),new Zend_Db_Expr('COUNT(distinct ' . $this->_getAlias() . '.id)'))
             ->query()
             ->fetchColumn();
     }
@@ -176,7 +182,7 @@ abstract class Query
             ->reset(Zend_Db_Select::LIMIT_COUNT);
     
         $select->distinct()
-            ->from(array($this->_alias => $this->_table),new Zend_Db_Expr('SUM(' . $this->_alias . '.' . $column . ')'))
+            ->from(array($this->_getAlias() => $this->_getTable()),new Zend_Db_Expr('SUM(' . $this->_getAlias() . '.' . $column . ')'))
             ->query()
             ->fetchColumn();
     }
@@ -199,7 +205,7 @@ abstract class Query
     public function getSelect()
     {
         $select = clone $this->_select;
-        return $select->distinct()->from(array($this->_alias => $this->_table));
+        return $select->distinct()->from(array($this->_getAlias() => $this->_getTable()));
     }
     
     /**

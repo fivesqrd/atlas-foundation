@@ -51,7 +51,7 @@ class Mapper
     {
         return "public function createObject(\$row)"
             . "\n{"
-            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Entity(\$row);"
+            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}\\Entity(\$this->_populate(\$row));"
             . "\n}\n";
     }
 }
