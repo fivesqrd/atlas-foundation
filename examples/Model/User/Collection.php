@@ -4,7 +4,7 @@ namespace Model\User;
 class Collection extends \Atlas\Collection
 {
 
-	public function targetClass()
+	public function getTargetClass()
 	{
 		return '\\Model\\User';
 	}

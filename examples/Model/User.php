@@ -10,9 +10,9 @@ class User
 	}
 	
 
-	public function query()
+	public function query($adapter)
 	{
-		return new User\Query(self::mapper());
+		return new User\Query($adapter);
 	}
 	
 }
