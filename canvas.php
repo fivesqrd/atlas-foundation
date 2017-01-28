@@ -3,6 +3,7 @@ require_once('src/Canvas/File/Model.php');
 require_once('src/Canvas/File/Entity.php');
 require_once('src/Canvas/File/Mapper.php');
 require_once('src/Canvas/File/Query.php');
+require_once('src/Canvas/File/Named.php');
 require_once('src/Canvas/File/Collection.php');
 require_once('src/Canvas/Writer.php');
 
@@ -21,6 +22,7 @@ $files = array(
     new Canvas\File\Mapper($namespace, $model),
     new Canvas\File\Collection($namespace, $model),
     new Canvas\File\Query($namespace, $model),
+    new Canvas\File\Named($namespace, $model),
 );
 
 if (!is_dir("{$path}/{$model}")) {

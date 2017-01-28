@@ -3,50 +3,45 @@ namespace Atlas;
 
 class Factory
 {
-    protected $_config = array();
+    protected $_class;
 
-    public function __construct($config)
+    public function __construct($config, $class)
     {
-        $this->_config = $config;
+        $this->_write = new Atlas\Database\Write(
+            $config['write'], 
+            $class\Mapper()
+        );
+
+        $this->_read = new Atlas\Database\Write(
+            $config['read'], 
+            $class\Mapper()
+        );
+
+        $this->_class = $class;
     }
 
-    public function fetch($class, $key)
+    public function fetch($key)
     {
-        return $this->_getReadAdapter($class)
-            ->fetch($key);
+        return $this->_read->fetch($key);
     }
 
-    public function query($class)
+    public function query()
     {
-        return $class::query($this->_getReadAdapter($class));
+        return $this->_class\Query($this->_read);
+    }
+
+    public function named()
+    {
+        return $this->_class\Named($this->_read);
     }
 
     public function save($entity)
     {
-        $class = get_class($entity->factory());
-        return $this->_getWriteAdapter($class)
-            ->save($entity);
+        return $this->_write->save($entity);
     }
 
     public function delete($entity)
     {
-        return $this->_getWriteAdapter($class)
-            ->delete($entity);
-    }
-
-    protected function _getWriteAdapter($class)
-    {
-        return new Atlas\Database\Write(
-            $this->_config['write'], 
-            $class::mapper()
-        );
-    }
-
-    protected function _getReadAdapter($class)
-    {
-        return new Atlas\Database\Read(
-            $this->_config['read'], 
-            $class::mapper()
-        );
+        return $this->_write->delete($entity);
     }
 }
