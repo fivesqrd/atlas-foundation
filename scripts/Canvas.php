@@ -13,11 +13,13 @@ if (count($argv) < 2) {
 }
 
 if (file_exists('.canvas/config.php')) {
+    /* Guess a config path */
     $config = include('.canvas/config.php'); 
 }
 
-if ($configpath) {
-    $config = include($configpath); 
+if (isset($argv[2])) {
+    /* A config path was provided */
+    $config = include($argv[2]); 
 }
 
 if (!isset($config)) {
@@ -27,6 +29,18 @@ if (!isset($config)) {
 
 $model = ucfirst($argv[1]);
 
+if (!is_dir($config['path'])) {
+    echo "Path specified in config does not exist: {$config['path']}\n";
+    exit;
+}
+
+echo "Creating {$model} model in directory: {$config['path']}\n";
+
+if (!is_dir("{$config['path']}/{$model}")) {
+    echo "- Creating model directory in {$config['path']}\n";
+    mkdir("{$config['path']}/{$model}");
+}
+
 $files = array(
     new Canvas\File\Model($config['namespace'], $model),
     new Canvas\File\Entity($config['namespace'], $model),
@@ -35,16 +49,6 @@ $files = array(
     new Canvas\File\Query($config['namespace'], $model),
     new Canvas\File\Named($config['namespace'], $model),
 );
-
-if (!is_dir($config['path'])) {
-    echo "Path specified in config does not exist: {$config['path']}\n";
-    exit;
-}
-
-if (!is_dir("{$config['path']}/{$model}")) {
-    echo "- Creating model directory in {$path}\n";
-    mkdir("{$config['path']}/{$model}");
-}
 
 $writer = new Canvas\Writer($config['path']);
 
