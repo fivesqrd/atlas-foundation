@@ -48,7 +48,7 @@ class Factory
 
         $class = $this->_getClass('Query');
 
-        return new $class($mapper, $select);
+        return new $class($this->_read->getAdapter(), $mapper, $select);
     }
 
     public function named()

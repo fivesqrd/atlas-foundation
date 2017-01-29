@@ -5,19 +5,22 @@ class Fetch
 {
     protected $_adapter;
 
-    protected $_select;
+    protected $_sql;
 
-    public function __construct($adapter, $mapper)
+    protected $_mapper;
+
+    public function __construct($adapter, $mapper, $sql)
     {
         $this->_adapter = $adapter;
+        $this->_sql = $sql;
         $this->_mapper = $mapper;
     }
 
-    protected function _getAdapter()
+    protected function _getSql()
     {
-        $adapter = clone $this->_adapter;
+        $sql = clone $this->_sql;
 
-        return $adpter->distinct()->from(
+        return $sql->distinct()->from(
             array($this->_getAlias() => $this->_getTable())
         );
     }
@@ -37,12 +40,12 @@ class Fetch
      */
     public function count()
     {
-        $adapter = $this->_getAdapter()
+        $sql = $this->_getSql()
             ->reset(Zend_Db_Select::COLUMNS)
             ->reset(Zend_Db_Select::LIMIT_OFFSET)
             ->reset(Zend_Db_Select::LIMIT_COUNT);
     
-        return $adapter->distinct()
+        return $sql->distinct()
             ->from(array($this->_getAlias() => $this->_getTable()),new Zend_Db_Expr('COUNT(distinct ' . $this->_getAlias() . '.id)'))
             ->query()
             ->fetchColumn();
@@ -54,7 +57,7 @@ class Fetch
      */
     public function sum($column)
     {
-        $adapter = $this->_getAdapter()
+        $sql = $this->_getSql()
             ->reset(Zend_Db_Select::COLUMNS)
             ->reset(Zend_Db_Select::LIMIT_OFFSET)
             ->reset(Zend_Db_Select::LIMIT_COUNT);
@@ -72,11 +75,11 @@ class Fetch
      */
     public function page($currentPage, $itemsPerPage)
     {
-        $adapter = $this->_getAdapter()
+        $sql = $this->_getSql()
             ->limitPage($currentPage, $itemsPerPage);
 
         return $this->_mapper->getCollection(
-            $adapter->query()->fetchAll()
+            $sql->query()->fetchAll()
         );
     }
     
@@ -86,7 +89,7 @@ class Fetch
     public function one()
     {
         return $this->_mapper->getEntity(
-            $this->_getAdapter()->query()->fetch()
+            $this->_getSql()->query()->fetch()
         );
     }
     
@@ -96,7 +99,7 @@ class Fetch
     public function all()
     {
         return $this->_mapper->getCollection(
-            $this->_getAdapter()->query()->fetchAll()
+            $this->_getSql()->query()->fetchAll()
         );
     }
 }

@@ -3,27 +3,36 @@ namespace Atlas\Query;
 
 class Select
 {
-    protected $_adapter;
+    protected $_sql;
 
     protected $_alias;
 
     protected $_ignoreEmptyValues;
 
-    public function __construct($adapter, $alias, $ignoreEmptyValues = false)
+    public function __construct($sql, $alias, $ignoreEmptyValues = false)
     {
-        $this->_adapter = $adapter;
+        $this->_sql = $sql;
         $this->_alias = $alias;
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
 
-    public function getAdapter()
+    public function toString()
     {
-        return $this->_adapter;
+        return $this->_sql->assemble();
+    }
+
+    /**
+     * Get the SQL statement creator 
+     * @return Zend_Db_Select 
+     */ 
+    public function getSql()
+    {
+        return $this->_sql;
     }
 
     public function isJoined($alias)
     {
-        $parts = $this->_adapter->getPart(Zend_Db_Select::FROM);
+        $parts = $this->_sql->getPart(Zend_Db_Select::FROM);
 
         if (array_key_exists($alias, $parts)) {
             return true;
@@ -86,7 +95,7 @@ class Select
      */
     public function limit($count, $offset = null)
     {
-        $this->_adapter->limit($count, $offset);
+        $this->_sql->limit($count, $offset);
         return $this;
     }
     
@@ -98,7 +107,7 @@ class Select
      */
     public function sort($spec)
     {
-        $this->_adapter->order($spec);
+        $this->_sql->order($spec);
         return $this;
     }
 
@@ -120,7 +129,7 @@ class Select
         }
 
         $template = $alias . '.' . $name . ' ' . $operator . ' ' . $placeholder;
-        $this->_adapter->where($template, $value);
+        $this->_sql->where($template, $value);
 
         return $this;
     }
