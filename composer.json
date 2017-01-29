@@ -5,7 +5,9 @@
         "zendframework/zendframework1": "^1.12"
     },
     "autoload": {
-        "classmap": ["src/Atlas"]
+        "psr-0": {
+            "Atlas": "src"
+        }
     },
     "version": "2.0.0",
     "license": ["Five  License"],
