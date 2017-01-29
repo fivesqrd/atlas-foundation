@@ -14,7 +14,7 @@ class Writer
         $filename = $this->_path . '/' . $file->getRelativePath();
 
         if (file_exists($filename)) {
-            throw new \Exception("File {$filename} already exists, skipping");
+            throw new \Exception("File {$file->getRelativePath()} already exists, skipping");
         }
 
         file_put_contents($filename, $this->_getContent($file));

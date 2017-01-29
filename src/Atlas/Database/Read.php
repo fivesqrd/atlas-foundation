@@ -1,9 +1,7 @@
 <?php
 namespace Atlas\Database;
 
-use Atlas\Exception as Exception;
-
-abstract class Read
+class Read
 {
     protected $_adapter;
 
@@ -43,13 +41,5 @@ abstract class Read
             ->where($column . ' = ?', $key);
         
         return $this->_mapper->getEntity($select->query()->fetch());
-    }
-
-    /**
-     * @return Zend_Db_Select
-     */
-    public function select()
-    {
-        return $this->_adapter->select();
     }
 }

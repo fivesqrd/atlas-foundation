@@ -1,9 +1,7 @@
 <?php
 namespace Atlas\Database;
 
-use Atlas\Exception as Exception;
-
-abstract class Write
+class Write
 {
     protected $_adapter;
 

@@ -3,21 +3,31 @@ namespace Atlas;
 
 class Factory
 {
-    protected $_class;
+    protected $_namespace;
 
-    public function __construct($config, $class)
+    public function __construct($config, $namespace)
     {
-        $this->_write = new Atlas\Database\Write(
+        $this->_namespace = $namespace;
+
+        $mapper = $this->_getClass('Mapper');
+
+        if (!array_key_exists('write', $config)) {
+            throw new Exception('Malformed write db config provided');
+        }
+
+        if (!array_key_exists('read', $config)) {
+            throw new Exception('Malformed read db config provided');
+        }
+
+        $this->_write = new Database\Write(
             $config['write'], 
-            $class\Mapper()
+            new $mapper()
         );
 
-        $this->_read = new Atlas\Database\Write(
+        $this->_read = new Database\Read(
             $config['read'], 
-            $class\Mapper()
+            new $mapper()
         );
-
-        $this->_class = $class;
     }
 
     public function fetch($key)
@@ -25,14 +35,26 @@ class Factory
         return $this->_read->fetch($key);
     }
 
-    public function query()
+    public function query($ignoreEmptyValues = false)
     {
-        return $this->_class\Query($this->_read);
+        $class = $this->_getClass('Mapper');
+        $mapper = new $class();
+
+        $select = new Query\Select(
+            new \Zend_Db_Select($this->_read->getAdapter()),
+            $mapper->getAlias(), 
+            $ignoreEmptyValues
+        );
+
+        $class = $this->_getClass('Query');
+
+        return new $class($mapper, $select);
     }
 
     public function named()
     {
-        return $this->_class\Named($this->_read);
+        $class = $this->_getClass('Named');
+        return new $class($this->_read);
     }
 
     public function save($entity)
@@ -43,5 +65,10 @@ class Factory
     public function delete($entity)
     {
         return $this->_write->delete($entity);
+    }
+
+    protected function _getClass($class)
+    {
+        return "\\{$this->_namespace}\\$class";
     }
 }

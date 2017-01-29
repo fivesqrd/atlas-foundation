@@ -3,13 +3,13 @@ namespace Atlas\Query;
 
 class Fetch
 {
-    protected $_provider;
+    protected $_adapter;
 
     protected $_select;
 
     public function __construct($adapter, $mapper)
     {
-        $this->_provider = $provider;
+        $this->_adapter = $adapter;
         $this->_mapper = $mapper;
     }
 

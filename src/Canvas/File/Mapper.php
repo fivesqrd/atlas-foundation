@@ -51,7 +51,7 @@ class Mapper
     {
         return "public function getEntity(\$row)"
             . "\n{"
-            . "\n\treturn new Entity(\$this->_populate(\$row);"
+            . "\n\treturn new Entity(\$this->_populate(\$row));"
             . "\n}";
     }
 
