@@ -4,10 +4,12 @@ require_once('TestAsset/MockModelBarebones/User/Mapper.php');
 require_once('TestAsset/MockModelBarebones/User/Query.php');
 require_once('TestAsset/MockModelBarebones/User/Named.php');
 
-use PHPUnit\Framework\TestCase;
-use Atlas\Query;
-use MockModelBarebones as Model;
+require_once('TestAsset/MockModelWithQueryMethods/User/Query.php');
+require_once('TestAsset/MockModelWithQueryMethods/User/Mapper.php');
 
+use PHPUnit\Framework\TestCase;
+use Atlas\Factory;
+use Atlas\Query;
 
 /**
  * @covers \Atlas\Factory
@@ -15,39 +17,58 @@ use MockModelBarebones as Model;
 class QueryTest extends TestCase
 {
     protected $_config = array(
-        'driver'   => 'Pdo_Mysql',
-        'dbname'   => 'tact',
-        'username' => 'username',
-        'password' => 'password',
-        'host'     => '192.168.254.10'
+        'read' => array(
+            'driver'   => 'Pdo_Mysql',
+            'dbname'   => 'tact',
+            'username' => 'username',
+            'password' => 'password',
+            'host'     => '192.168.254.10'
+        ),
+        'write' => array(
+            'driver'   => 'Pdo_Mysql',
+            'dbname'   => 'tact',
+            'username' => 'username',
+            'password' => 'password',
+            'host'     => '192.168.254.10'
+        ),
     );
 
     public function testFetchMethodIsReturningValidObject()
     {
-        $adapter = new \Zend_Db_Adapter_Pdo_Mysql($this->_config);
-
-        $query = new Model\User\Query(
-            new Model\User\Mapper(), 
-            new \Zend_Db_Select($adapter)
-        ); 
+        $factory = new Factory(
+            $this->_config, MockModelBarebones\User::class
+        );
 
         $this->assertInstanceOf(
-            Query\Fetch::class,
-            $query->fetch() 
+            Query\Fetch::class, $factory->query()->fetch()
         );
     }
 
-    public function testSqlIsEmpty()
+    public function testSqlIsEmptyAtFirst()
     {
-        $adapter = new \Zend_Db_Adapter_Pdo_Mysql($this->_config);
+        $factory = new Factory(
+            $this->_config,  MockModelBarebones\User::class
+        );
 
-        $query = new Model\User\Query(
-            new Model\User\Mapper(), 
-            new \Zend_Db_Select($adapter)
-        ); 
+        $this->assertNull(
+            $factory->query()->getSql() 
+        );
+    }
+
+    /*
+    public function testSqlIsPopulated()
+    {
+        $factory = new Factory(
+            $this->_config, 
+            MockModelWithQueryMethods\User::class
+        );
+
+        $query = $factory->query()
+            ->isEnabled();
 
         $this->assertNull(
             $query->getSql() 
         );
     }
+    */
 }
