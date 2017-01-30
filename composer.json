@@ -1,5 +1,5 @@
 {
-	"name": "click-science/atlas",
+	"name": "fivesqrd/atlas",
 	"description": "Simple Data Mapper Library",
 	"require": {
         "zendframework/zendframework1": "^1.12"
@@ -10,11 +10,11 @@
         }
     },
     "version": "2.0.0",
-    "license": ["Five  License"],
+    "license": ["Five Squared License"],
     "authors": [
         {
             "name": "Christian Burger",
-            "email": "christian@clickscience.co.za",
+            "email": "christian@fivesqrd.com",
             "role": "Developer"
         }
     ]
