@@ -1,5 +1,5 @@
 {
-	"name": "click-science/atlas",
+	"name": "fivesqrd/atlas",
 	"description": "Simple Data Mapper Library",
     "autoload": {
         "classmap": ["src/Atlas"]
