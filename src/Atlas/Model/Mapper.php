@@ -125,6 +125,10 @@ abstract class Mapper
      */
     protected function _populate($row)
     {
+        if (!is_array($row)) {
+            return array();
+        }
+
         $properties = array();
         
         foreach($this->_map as $property => $field) {
