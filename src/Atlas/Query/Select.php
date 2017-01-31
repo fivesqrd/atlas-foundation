@@ -88,29 +88,6 @@ class Select
        return $this->addToStack($name, 'like', '?', '%' . $value . '%', $alias);
     }
 
-    /**
-     * @param int $count
-     * @param int $offset
-     * @return Atom_Model_Query
-     */
-    public function limit($count, $offset = null)
-    {
-        $this->_sql->limit($count, $offset);
-        return $this;
-    }
-    
-    /**
-     *
-     * @param string|array $spec See Zend_Db_Select::order();
-     * @link http://framework.zend.com/manual/1.12/en/zend.db.select.html#zend.db.select.building.order
-     * @return Atom_Query
-     */
-    public function sort($spec)
-    {
-        $this->_sql->order($spec);
-        return $this;
-    }
-
     protected function _isEmpty($value)
     {
         if ($value === '' || $value === null) {

@@ -21,6 +21,28 @@ abstract class Query
         $this->_mapper = $mapper;
         $this->_select = $select;
     }
+ 
+    /**
+     * @param int $count
+     * @param int $offset
+     * @return Atom\Query
+     */
+    public function limit($count, $offset = null)
+    {
+        $this->_select()->getSql()->limit($count, $offset);
+        return $this;
+    }
+
+    /**
+     *
+     * @param string|array $spec See Zend_Db_Select::order();
+     * @return Atom\Query
+     */
+    public function sort($spec)
+    {
+        $this->_select()->getSql()->order($spec);
+        return $this;
+    }
 
     /**
      * Get the select object to add to the statement. 
