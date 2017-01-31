@@ -37,6 +37,15 @@ class Entity
     public function getMethods()
     {
         return array(
+            //return $this->_createFactory()
         );
+    }
+
+    protected function _createFactory()
+    {
+        return "public function factory()"
+            . "\n{"
+            . "\n\treturn new \\{$this->_namespace}\\{$this->_model}();"
+            . "\n}";
     }
 }

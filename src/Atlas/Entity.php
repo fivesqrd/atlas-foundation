@@ -9,8 +9,6 @@ abstract class Entity
     
     private $__observers = array();
 
-    abstract public function factory();
-    
     public function __construct($properties = array())
     {
         foreach ($properties as $key => $value) {
