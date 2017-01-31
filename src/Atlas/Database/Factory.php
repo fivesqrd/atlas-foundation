@@ -31,7 +31,7 @@ class Factory
 
     public function mapper()
     {
-        $class = $this->_getClass('Mapper');
+        $class = $this->getClass('Mapper');
         return new $class();
     }
 
