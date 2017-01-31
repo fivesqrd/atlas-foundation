@@ -3,22 +3,31 @@ namespace Atlas\Query;
 
 class Fetch
 {
+    /**
+     * @var Zend_Db
+     */
     protected $_adapter;
 
-    protected $_sql;
+    /**
+     * @var Atlas\Query\Select
+     */
+    protected $_select;
 
+    /**
+     * @var Atlas\Maper
+     */
     protected $_mapper;
 
-    public function __construct($adapter, $mapper, $sql)
+    public function __construct($adapter, $mapper, $select)
     {
         $this->_adapter = $adapter;
-        $this->_sql = $sql;
+        $this->_select = $select;
         $this->_mapper = $mapper;
     }
 
     protected function _getSql()
     {
-        $sql = clone $this->_sql;
+        $sql = clone $this->_select->getSql();
 
         return $sql->distinct()->from(
             array($this->_getAlias() => $this->_getTable())
