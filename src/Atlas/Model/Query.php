@@ -1,10 +1,12 @@
 <?php
-namespace Atlas;
+namespace Atlas\Model;
+
+use Atlas\Database as Database;
 
 abstract class Query
 {
     /**
-     * @var Atlas\Query\Select
+     * @var Atlas\Database\Select
      */
     protected $_select;
 
@@ -47,7 +49,7 @@ abstract class Query
     /**
      * Get the select object to add to the statement. 
      * Not exposed to user land
-     * @return Atlas\Query\Select
+     * @return Atlas\Database\Select
      */ 
     protected function _select()
     {
@@ -65,11 +67,11 @@ abstract class Query
 
     /**
      * Get the fetch object to handle the various fetch strategies
-     * @return Atlas\Query\Fetch 
+     * @return Atlas\Database\Fetch 
      */ 
     public function fetch()
     {
-        return new Query\Fetch(
+        return new Database\Fetch(
             $this->_adapter, $this->_mapper, $this->_select
         );
     }

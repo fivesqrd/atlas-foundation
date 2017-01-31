@@ -20,7 +20,7 @@ class Named
 
     public function getClass()
     {
-        return 'Named extends \Atlas\Named';
+        return 'Named extends \Atlas\Model\Named';
     }
 
     public function getNamespace()
@@ -45,7 +45,7 @@ class Named
     {
         return "protected function _factory()"
             . "\n{"
-            . "\n\treturn new Query(\$this->_adapter);"
+            . "\n\treturn new Query(\$this->_router);"
             . "\n}";
     }
 }

@@ -7,9 +7,9 @@ class Write
 
     protected $_mapper;
 
-    public function __construct($config, $mapper)
+    public function __construct($adapter, $mapper)
     {
-        $this->_adapter = new \Zend_Db_Adapter_Pdo_Mysql($config);
+        $this->_adapter = $adapter;
         $this->_mapper = $mapper;
     }
 

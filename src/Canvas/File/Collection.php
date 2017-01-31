@@ -20,7 +20,7 @@ class Collection
 
     public function getClass()
     {
-        return 'Collection extends \Atlas\Collection';
+        return 'Collection extends \Atlas\Model\Collection';
     }
 
     public function getNamespace()

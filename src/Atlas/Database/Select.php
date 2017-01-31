@@ -1,5 +1,5 @@
 <?php
-namespace Atlas\Query;
+namespace Atlas\Database;
 
 class Select
 {

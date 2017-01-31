@@ -1,5 +1,5 @@
 <?php
-namespace Atlas;
+namespace Atlas\Model;
 
 abstract class Collection implements \Iterator, \Countable
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Atlas\Query;
+namespace Atlas\Database;
 
 class Fetch
 {
@@ -9,20 +9,20 @@ class Fetch
     protected $_adapter;
 
     /**
-     * @var Atlas\Query\Select
+     * @var Atlas\Database\Select
      */
     protected $_select;
 
     /**
-     * @var Atlas\Maper
+     * @var Atlas\Model\Maper
      */
     protected $_mapper;
 
     public function __construct($adapter, $mapper, $select)
     {
         $this->_adapter = $adapter;
-        $this->_select = $select;
         $this->_mapper = $mapper;
+        $this->_select = $select;
     }
 
     protected function _getSql()

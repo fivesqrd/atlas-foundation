@@ -1,5 +1,5 @@
 <?php
-namespace Atlas;
+namespace Atlas\Model;
 
 abstract class Entity
 {

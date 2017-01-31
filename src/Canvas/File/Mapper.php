@@ -20,7 +20,7 @@ class Mapper
 
     public function getClass()
     {
-        return 'Mapper extends \Atlas\Mapper';
+        return 'Mapper extends \Atlas\Model\Mapper';
     }
 
     public function getNamespace()
