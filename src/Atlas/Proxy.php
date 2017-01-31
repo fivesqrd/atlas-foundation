@@ -26,9 +26,9 @@ class Proxy
         $query = $this->_factory->getClass('Query');
 
         return new $query(
-            $this->_factory->adapter(), 
-            $this->_factory->mapper(), 
-            $this->_factory->select(), 
+            $this->_factory->adapter(),
+            $this->_factory->mapper(),
+            $this->_factory->select()
         );
     }
 
@@ -37,9 +37,9 @@ class Proxy
         $class = $this->_factory->getClass('Named');
 
         return new $class(
-            $this->_factory->adapter(), 
-            $this->_factory->mapper(), 
-            $this->_factory->select(), 
+            $this->_factory->adapter(),
+            $this->_factory->mapper(),
+            $this->_factory->select()
         );
     }
 
