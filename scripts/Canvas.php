@@ -12,9 +12,9 @@ if (count($argv) < 2) {
     exit;
 }
 
-if (file_exists('.canvas/config.php')) {
+if (file_exists('.atlas/config.php')) {
     /* Guess a config path */
-    $config = include('.canvas/config.php'); 
+    $config = include('.atlas/config.php'); 
 }
 
 if (isset($argv[2])) {
@@ -29,28 +29,28 @@ if (!isset($config)) {
 
 $model = ucfirst($argv[1]);
 
-if (!is_dir($config['path'])) {
-    echo "Path specified in config does not exist: {$config['path']}\n";
+if (!is_dir($config['canvas']['path'])) {
+    echo "Path specified in config does not exist: {$config['canvas']['path']}\n";
     exit;
 }
 
-echo "Creating {$model} model in directory: {$config['path']}\n";
+echo "Creating {$model} model in directory: {$config['canvas']['path']}\n";
 
-if (!is_dir("{$config['path']}/{$model}")) {
-    echo "- Creating model directory in {$config['path']}\n";
-    mkdir("{$config['path']}/{$model}");
+if (!is_dir("{$config['canvas']['path']}/{$model}")) {
+    echo "- Creating model directory in {$config['canvas']['path']}\n";
+    mkdir("{$config['canvas']['path']}/{$model}");
 }
 
 $files = array(
-    new Canvas\File\Model($config['namespace'], $model),
-    new Canvas\File\Entity($config['namespace'], $model),
-    new Canvas\File\Mapper($config['namespace'], $model),
-    new Canvas\File\Collection($config['namespace'], $model),
-    new Canvas\File\Query($config['namespace'], $model),
-    new Canvas\File\Named($config['namespace'], $model),
+    new Canvas\File\Model($config['canvas']['namespace'], $model),
+    new Canvas\File\Entity($config['canvas']['namespace'], $model),
+    new Canvas\File\Mapper($config['canvas']['namespace'], $model),
+    new Canvas\File\Collection($config['canvas']['namespace'], $model),
+    new Canvas\File\Query($config['canvas']['namespace'], $model),
+    new Canvas\File\Named($config['canvas']['namespace'], $model),
 );
 
-$writer = new Canvas\Writer($config['path']);
+$writer = new Canvas\Writer($config['canvas']['path']);
 
 foreach ($files as $file) {
     try {
