@@ -34,10 +34,8 @@ if (!is_dir($config['canvas']['path'])) {
     exit;
 }
 
-echo "Creating {$model} model in directory: {$config['canvas']['path']}\n";
-
 if (!is_dir("{$config['canvas']['path']}/{$model}")) {
-    echo "- Creating model directory in {$config['canvas']['path']}\n";
+    echo "Creating {$model} model in directory: {$config['canvas']['path']}\n";
     mkdir("{$config['canvas']['path']}/{$model}");
 }
 
