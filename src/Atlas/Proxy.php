@@ -47,13 +47,6 @@ class Proxy
             ->save($entity);
     }
 
-    public function save($entity)
-    {
-        return $this->_factory
-            ->write($this->_resolver)
-            ->save($entity);
-    }
-
     public function delete($entity)
     {
         return $this->_factory
