@@ -68,7 +68,7 @@ class Factory
         return $resolver->query(
             $this->adapter('read'), 
             $resolver->mapper(), 
-            $this->select($ignoreEmptyValues)
+            $this->select($resolver, $ignoreEmptyValues)
         );
     }
 
