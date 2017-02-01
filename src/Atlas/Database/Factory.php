@@ -41,7 +41,7 @@ class Factory
     public function fetch($resolver, $key)
     {
         $mapper = $resolver->mapper();
-        $select = $this->select($mapper->getAlias())
+        $select = $this->select($resolver, $mapper->getAlias())
             ->isEqual('id', $key);
 
         return new Fetch(
