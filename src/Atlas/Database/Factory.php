@@ -60,7 +60,7 @@ class Factory
 
     public function named($resolver)
     {
-        return new $resolver->named($this);
+        return $resolver->named($this);
     }
     
     public function query($resolver, $ignoreEmptyValues = false)
