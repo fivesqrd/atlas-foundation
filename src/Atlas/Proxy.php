@@ -34,6 +34,19 @@ class Proxy
         );
     }
 
+    public function relation($entity)
+    {
+        return $this->_factory
+            ->relation($this->_resolver, $entity);
+    }
+
+    public function save($entity)
+    {
+        return $this->_factory
+            ->write($this->_resolver)
+            ->save($entity);
+    }
+
     public function save($entity)
     {
         return $this->_factory
