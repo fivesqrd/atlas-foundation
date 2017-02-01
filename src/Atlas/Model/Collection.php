@@ -12,6 +12,16 @@ abstract class Collection implements \Iterator, \Countable
 	
 	abstract public function getTargetClass();
 	
+	public function __construct($raw, Mapper $mapper)
+	{
+		if ($raw && $mapper) {
+			$this->_raw = $raw;
+			$this->_total = count($raw);
+		}
+		
+		$this->_mapper = $mapper;
+	}
+	
 	public function count()
 	{
 		return $this->_total;
@@ -26,16 +36,6 @@ abstract class Collection implements \Iterator, \Countable
 		//TODO: lazy loading
 		$this->_objects[$this->_total] = $object;
 		$this->_total++;
-	}
-	
-	public function __construct($raw, Mapper $mapper)
-	{
-		if ($raw && $mapper) {
-			$this->_raw = $raw;
-			$this->_total = count($raw);
-		}
-		
-		$this->_mapper = $mapper;
 	}
 	
 	public function getRow($no)

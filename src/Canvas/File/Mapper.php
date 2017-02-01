@@ -59,7 +59,7 @@ class Mapper
     {
         return "public function getCollection(\$rows)"
             . "\n{"
-            . "\n\treturn new Collection(\$rows);"
+            . "\n\treturn new Collection(\$rows, \$this);"
             . "\n}";
     }
 }
