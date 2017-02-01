@@ -25,9 +25,9 @@ class Fetch
         $this->_select = $select;
     }
 
-    protected function _getSql()
+    protected function _getSqlClone()
     {
-        $sql = clone $this->_select->getSql();
+        $sql = clone $this->_select->sql();
 
         return $sql->distinct()->from(
             array($this->_getAlias() => $this->_getTable())
@@ -49,7 +49,7 @@ class Fetch
      */
     public function count()
     {
-        $sql = $this->_getSql()
+        $sql = $this->_getSqlClone()
             ->reset(\Zend_Db_Select::COLUMNS)
             ->reset(\Zend_Db_Select::LIMIT_OFFSET)
             ->reset(\Zend_Db_Select::LIMIT_COUNT);
@@ -66,7 +66,7 @@ class Fetch
      */
     public function sum($column)
     {
-        $sql = $this->_getSql()
+        $sql = $this->_getSqlClone()
             ->reset(\Zend_Db_Select::COLUMNS)
             ->reset(\Zend_Db_Select::LIMIT_OFFSET)
             ->reset(\Zend_Db_Select::LIMIT_COUNT);
@@ -84,7 +84,7 @@ class Fetch
      */
     public function page($currentPage, $itemsPerPage)
     {
-        $sql = $this->_getSql()
+        $sql = $this->_getSqlClone()
             ->limitPage($currentPage, $itemsPerPage);
 
         return $this->_mapper->getCollection(
@@ -98,7 +98,7 @@ class Fetch
     public function one()
     {
         return $this->_mapper->getEntity(
-            $this->_getSql()->query()->fetch()
+            $this->_getSqlClone()->query()->fetch()
         );
     }
     
@@ -108,7 +108,7 @@ class Fetch
     public function all()
     {
         return $this->_mapper->getCollection(
-            $this->_getSql()->query()->fetchAll()
+            $this->_getSqlClone()->query()->fetchAll()
         );
     }
 }
