@@ -32,7 +32,7 @@ class Select
 
     public function isJoined($alias)
     {
-        $parts = $this->_sql->getPart(Zend_Db_Select::FROM);
+        $parts = $this->_sql->getPart(\Zend_Db_Select::FROM);
 
         if (array_key_exists($alias, $parts)) {
             return true;

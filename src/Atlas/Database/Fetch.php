@@ -50,12 +50,12 @@ class Fetch
     public function count()
     {
         $sql = $this->_getSql()
-            ->reset(Zend_Db_Select::COLUMNS)
-            ->reset(Zend_Db_Select::LIMIT_OFFSET)
-            ->reset(Zend_Db_Select::LIMIT_COUNT);
+            ->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(\Zend_Db_Select::LIMIT_OFFSET)
+            ->reset(\Zend_Db_Select::LIMIT_COUNT);
     
         return $sql->distinct()
-            ->from(array($this->_getAlias() => $this->_getTable()),new Zend_Db_Expr('COUNT(distinct ' . $this->_getAlias() . '.id)'))
+            ->from(array($this->_getAlias() => $this->_getTable()),new \Zend_Db_Expr('COUNT(distinct ' . $this->_getAlias() . '.id)'))
             ->query()
             ->fetchColumn();
     }
@@ -67,12 +67,12 @@ class Fetch
     public function sum($column)
     {
         $sql = $this->_getSql()
-            ->reset(Zend_Db_Select::COLUMNS)
-            ->reset(Zend_Db_Select::LIMIT_OFFSET)
-            ->reset(Zend_Db_Select::LIMIT_COUNT);
+            ->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(\Zend_Db_Select::LIMIT_OFFSET)
+            ->reset(\Zend_Db_Select::LIMIT_COUNT);
     
         $select->distinct()
-            ->from(array($this->_getAlias() => $this->_getTable()),new Zend_Db_Expr('SUM(' . $this->_getAlias() . '.' . $column . ')'))
+            ->from(array($this->_getAlias() => $this->_getTable()),new \Zend_Db_Expr('SUM(' . $this->_getAlias() . '.' . $column . ')'))
             ->query()
             ->fetchColumn();
     }
