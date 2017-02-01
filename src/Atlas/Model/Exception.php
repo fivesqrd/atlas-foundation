@@ -1,5 +1,5 @@
 <?php
-namespace Atlas\Database;
+namespace Atlas\Model;
 
 class Exception extends \Atlas\Exception
 {
