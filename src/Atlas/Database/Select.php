@@ -25,7 +25,7 @@ class Select
      * Get the SQL statement creator 
      * @return Zend_Db_Select 
      */ 
-    public function getSql()
+    public function sql()
     {
         return $this->_sql;
     }
