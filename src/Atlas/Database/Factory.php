@@ -5,12 +5,9 @@ class Factory
 {
     protected $_config;
 
-    protected $_resolver;
-
-    public function __construct($config, $resolver)
+    public function __construct($config)
     {
         $this->_config = $config;
-        $this->_resolver = $resolver;
     }
 
     public function adapter($mode)
@@ -32,18 +29,18 @@ class Factory
         );
     }
 
-    public function select($ignoreEmptyValues = false)
+    public function select($resolver, $ignoreEmptyValues = false)
     {
         return new Select(
             new \Zend_Db_Select($this->adapter('read')),
-            $this->_resolver->mapper()->getAlias(), 
+            $resolver->mapper()->getAlias(), 
             $ignoreEmptyValues
         );
     }
 
-    public function fetch($key)
+    public function fetch($resolver, $key)
     {
-        $mapper = $this->_resolver->mapper();
+        $mapper = $resolver->mapper();
         $select = $this->select($mapper->getAlias())
             ->isEqual('id', $key);
 
@@ -52,25 +49,33 @@ class Factory
         );
     }
 
-    public function named()
+    public function relation($resolver, $entity)
     {
-        return new $this->_resolver->named(
-        );
+        if (is_numeric($entity)) {
+            $entity = $this->fetch($key);
+        }
+
+        return $resolver->relation($this, $entity);
+    }
+
+    public function named($resolver)
+    {
+        return new $resolver->named($this);
     }
     
-    public function query($ignoreEmptyValues = false)
+    public function query($resolver, $ignoreEmptyValues = false)
     {
-        return $this->_resolver->query(
+        return $resolver->query(
             $this->adapter('read'), 
-            $this->_resolver->mapper(), 
+            $resolver->mapper(), 
             $this->select($ignoreEmptyValues)
         );
     }
 
-    public function write()
+    public function write($resolver)
     {
         return new Write(
-            $this->adapter('write'), $this->_resolver->mapper() 
+            $this->adapter('write'), $resolver->mapper() 
         );
     }
 }

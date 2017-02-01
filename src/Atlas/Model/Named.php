@@ -4,14 +4,27 @@ namespace Atlas\Model;
 abstract class Named
 {
     /**
-     * @var Atlas\Database\Read
+     * @var Atlas\Database\Factory
      */
-    protected $_router;
+    private $factory;
 
-    abstract protected function _factory();
+    /**
+     * @var Atlas\Database\Resolver
+     */
+    private $resolver;
 
-    public function __construct($router)
+    public function __construct($factory, $resolver)
     {
-        $this->_router = $router;
+        $this->factory = $factory;
+        $this->resolver = $resolver;
+    }
+
+    /**
+     * Create new query instance
+     * @return Query
+     */
+    protected function _query($ignoreEmptyValues = false)
+    {
+        return $this->factory->query($this->resolver, $ignoreEmptyValues);
     }
 }

@@ -27,9 +27,15 @@ class Resolver
         return new $class($adapter, $mapper, $select);
     }
 
-    public function named()
+    public function named($factory)
     {
         $class = $this->_getClass('Named');
-        return new $class();
+        return new $class($factory, $this);
+    }
+
+    public function relation($factory, $entity)
+    {
+        $class = $this->_getClass('Relation');
+        return new $class($factory, $entity);
     }
 }

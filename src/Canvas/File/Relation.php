@@ -1,7 +1,7 @@
 <?php
 namespace Canvas\File;
 
-class Named
+class Relation
 {
     protected $_namespace;
 
@@ -15,12 +15,12 @@ class Named
 
     public function getRelativePath()
     {
-        return $this->_model . '/Named.php';
+        return $this->_model . '/Relation.php';
     }
 
     public function getClass()
     {
-        return 'Named extends \Atlas\Model\Named';
+        return 'Relation extends \Atlas\Model\Relation';
     }
 
     public function getNamespace()
@@ -30,22 +30,11 @@ class Named
 
     public function getProperties()
     {
-        return array(
-        );
+        return array();
     } 
 
     public function getMethods()
     {
-        return array(
-            $this->_createAll(),
-        );
-    }
-
-    protected function _createFactory()
-    {
-        return "public function all()"
-            . "\n{"
-            . "\n\treturn this->_query();"
-            . "\n}";
+        return array();
     }
 }

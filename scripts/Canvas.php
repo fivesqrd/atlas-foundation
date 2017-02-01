@@ -5,6 +5,7 @@ require_once(realpath(__DIR__) . '/../src/Canvas/File/Mapper.php');
 require_once(realpath(__DIR__) . '/../src/Canvas/File/Query.php');
 require_once(realpath(__DIR__) . '/../src/Canvas/File/Named.php');
 require_once(realpath(__DIR__) . '/../src/Canvas/File/Collection.php');
+require_once(realpath(__DIR__) . '/../src/Canvas/File/Relation.php');
 require_once(realpath(__DIR__) . '/../src/Canvas/Writer.php');
 
 if (count($argv) < 2) {
@@ -46,6 +47,7 @@ $files = array(
     new Canvas\File\Collection($config['canvas']['namespace'], $model),
     new Canvas\File\Query($config['canvas']['namespace'], $model),
     new Canvas\File\Named($config['canvas']['namespace'], $model),
+    new Canvas\File\Relation($config['canvas']['namespace'], $model),
 );
 
 $writer = new Canvas\Writer($config['canvas']['path']);
