@@ -23,7 +23,7 @@ abstract class Relation
         );
     }
 
-    protected function _entity($namespace)
+    protected function _entity()
     {
         return $this->entity;
     }
