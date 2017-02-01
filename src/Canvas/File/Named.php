@@ -41,7 +41,7 @@ class Named
         );
     }
 
-    protected function _createFactory()
+    protected function _createAll()
     {
         return "public function all()"
             . "\n{"
