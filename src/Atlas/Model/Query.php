@@ -31,7 +31,7 @@ abstract class Query
      */
     public function limit($count, $offset = null)
     {
-        $this->_select()->getSql()->limit($count, $offset);
+        $this->_select()->sql()->limit($count, $offset);
         return $this;
     }
 
@@ -42,7 +42,7 @@ abstract class Query
      */
     public function sort($spec)
     {
-        $this->_select()->getSql()->order($spec);
+        $this->_select()->sql()->order($spec);
         return $this;
     }
 
