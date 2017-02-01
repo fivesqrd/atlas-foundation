@@ -12,35 +12,17 @@ class Proxy
 
     public function fetch($key)
     {
-        $fetch = new Database\Fetch(
-            $this->_factory->adapter(), 
-            $this->_factory->mapper(), 
-            $this->_factory->select()->isEqual('id', $key)
-        );
-        
-        return $fetch->one();
+        return $this->_factory->fetch($key)->one();
     }
 
     public function query($ignoreEmptyValues = false)
     {
-        $query = $this->_factory->getClass('Query');
-
-        return new $query(
-            $this->_factory->adapter(),
-            $this->_factory->mapper(),
-            $this->_factory->select()
-        );
+        return $this->_factory->query($ignoreEmptyValues);
     }
 
     public function named()
     {
-        $class = $this->_factory->getClass('Named');
-
-        return new $class(
-            $this->_factory->adapter(),
-            $this->_factory->mapper(),
-            $this->_factory->select()
-        );
+        return new $this->_factory->named();
     }
 
     public function save($entity)

@@ -1,7 +1,7 @@
 <?php
 namespace MockModelBarebones\User;
 
-class Mapper extends \Atlas\Mapper
+class Mapper extends \Atlas\Model\Mapper
 {
 	protected $_alias = null;
 

@@ -1,6 +1,6 @@
 <?php
 namespace MockModelBarebones\User;
 
-class Entity extends \Atlas\Entity
+class Query extends \Atlas\Model\Query
 {
 }

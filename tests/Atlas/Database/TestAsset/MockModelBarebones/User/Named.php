@@ -1,7 +1,7 @@
 <?php
 namespace MockModelBarebones\User;
 
-class Named extends \Atlas\Named
+class Named extends \Atlas\Model\Named
 {
 
 	protected function _factory()
