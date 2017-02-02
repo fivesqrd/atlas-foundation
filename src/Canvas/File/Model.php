@@ -36,8 +36,8 @@ class Model
     public function getMethods()
     {
         return array(
-            $this->_getMapper(),
-            $this->_getQuery(),
+            //$this->_getMapper(),
+            //$this->_getQuery(),
         );
     }
 
