@@ -39,7 +39,7 @@ abstract class Entity
         }
 
         if (!property_exists($this, $property)) {
-            throw new Exception("Property '{$property}' does not exist for " . get_class($this));
+            throw new Exception("Property '{$property}' not declared for " . get_class($this));
         }
 
         return $this->{$property};
@@ -47,6 +47,10 @@ abstract class Entity
 
     public function set($property, $value)
     {
+        if (!property_exists($this, $property)) {
+            throw new Exception("Property '{$property}' not declared for " . get_class($this));
+        }
+
         $this->{$property} = $value;
     }
     
