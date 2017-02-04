@@ -1,30 +1,20 @@
 <?php
-namespace Atlas\Database;
+namespace Atlas\Database\Sql;
 
 class Select
 {
-    protected $_sql;
-
     protected $_alias;
 
     protected $_joins;
 
-    protected $_ignoreEmptyValues;
-
-    public function __construct($sql, $alias, $ignoreEmptyValues = false)
+    public function __construct()
     {
-        $this->_sql = $sql;
-        $this->_alias = $alias;
-        $this->_ignoreEmptyValues = $ignoreEmptyValues;
+        $this->_where = new Sql\Where(); 
     }
 
-    public function toString()
+    public function assemble($what, $where)
     {
-        return $this->assemble();
-    }
-
-    public function assemble()
-    {
+        return "SELECT {$what} FROM {$where}";
     }
 
     public function join($table, $alias = null)
@@ -48,10 +38,6 @@ class Select
         if (array_key_exists($alias, $this->_joins)) {
             return true;
         } 
-
-        if ($alias == $this->_alias) {
-            return true;
-        }
 
         return false;
     }

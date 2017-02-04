@@ -21,20 +21,43 @@ class Write
      */
     public function save($entity, $column = 'id')
     {
-        $table = $this->_mapper->getTable();
-        $data = $this->_mapper->extract($entity);
-
         if ($entity->getId() !== null)
         {
-            $this->_adapter->update($table, $data, $column . ' = ' . $this->_adapter->quote($entity->getId()));
-            $entity->notify('change');
+            $this->update($entity, $column);
         } else {
-            $this->_adapter->insert($table, $data);
-            $id = $this->_adapter->lastInsertId();
-            $entity->setId($id);
-            $entity->notify('create');
+            $this->insert($entity, $column);
         }
     
+        return $entity->getId();
+    }
+
+    public function insert($entity, $column)
+    {
+        $insert = new Sql\Insert(
+            $this->_mapper->getTable(),
+            $this->_mapper->extract($entity)
+        );
+
+        $result = $this->execute($insert);
+
+        $entity->setId($this->_adapter->lastInsertId());
+        $entity->notify('create');
+
+        return $entity->getId();
+    }
+
+    public function update($entity, $column)
+    {
+        $update = new Sql\Update(
+            $this->_mapper->getTable(), 
+            $this->_mapper->extract($entity)
+        );
+
+        $update->where()->isEqual($column, $entity->getId());
+
+        $result = $this->execute($update);
+        $entity->notify('change');
+        
         return $entity->getId();
     }
     
@@ -45,11 +68,29 @@ class Write
      */
     public function delete($entity, $column = 'id')
     {
-        $this->_adapter->delete(
-            $this->_mapper->getTable(), 
-            $column . ' = ' . $this->_adapter->quote($entity->getId())
+        $delete = new Sql\Delete(
+            $this->_mapper->getTable()
         );
 
+        $delete->where()->isEqual($column, $entity->getId());
+
+        $result = $this->execute($delete);
         $entity->notify('delete');
+
+        return $result;
+    }
+
+    private function execute($sql)
+    {
+        $statement = $this->_adapter->prepare(
+            $sql->assemble()
+        );
+
+        return $statement->execute(
+            array_merge(
+                $sql->getBoundValues()
+                $sql->where()->getBoundValues()
+            )
+        );
     }
 }

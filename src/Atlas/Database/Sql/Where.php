@@ -12,20 +12,29 @@ class Where
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
 
-    public function getSql()
+    public function assemble()
     {
         $sql = null;
 
-        foreach ($this->_stack as $key => $value) {
-            array_push($sql, "({$key})");
+        foreach (array_keys($this->_stack) as $statement) {
+            array_push($sql, "({$statement})");
         }
 
-        return implode(' AND ', $sql);
+        return ' WHERE ' . implode(' AND ', $sql);
     }
 
-    public function getBoundParams()
+    public function getBoundValues()
     {
         return array_values($this->_stack);
+    }
+
+    public function and($statement, $values)
+    {
+        array_push($this->_stack, array(
+            $statement => $values
+        ));
+
+        return $this;
     }
 
     public function isIn($name, array $values, $alias = null)

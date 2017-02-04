@@ -29,23 +29,12 @@ class Factory
         );
     }
 
-    public function select($resolver, $ignoreEmptyValues = false)
-    {
-        return new Select(
-            new \Zend_Db_Select($this->adapter('read')),
-            $resolver->mapper()->getAlias(), 
-            $ignoreEmptyValues
-        );
-    }
-
     public function fetch($resolver, $key)
     {
-        $mapper = $resolver->mapper();
-        $select = $this->select($resolver, $mapper->getAlias())
-            ->isEqual('id', $key);
-
-        return new Fetch(
-            $this->adapter('read'), $mapper, $select
+        return new Sql\Fetch(
+            $this->adapter('read'), 
+            $resolver->mapper(),
+            (new Sql\Select())->isEqual('id', $key)
         );
     }
 
@@ -68,7 +57,7 @@ class Factory
         return $resolver->query(
             $this->adapter('read'), 
             $resolver->mapper(), 
-            $this->select($resolver, $ignoreEmptyValues)
+            new Sql\Select()
         );
     }
 
