@@ -4,7 +4,7 @@ namespace Atlas\Database\Sql;
 class Fetch
 {
     /**
-     * @var Zend_Db
+     * @var PDO
      */
     protected $_adapter;
 
@@ -50,8 +50,8 @@ class Fetch
 
     public function getSql($what = null)
     {
-        if ($what === null) }
-            $what = $this->_getAlias() . '*';
+        if ($what === null) {
+            $what = $this->_getAlias() . '.*';
         }
 
         $from = $this->_getTable() . ' AS ' . $this->_getAlias();

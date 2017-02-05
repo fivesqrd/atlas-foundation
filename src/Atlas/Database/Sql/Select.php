@@ -3,20 +3,21 @@ namespace Atlas\Database\Sql;
 
 class Select
 {
-    protected $_alias;
-
     protected $_joins = array();
 
-    public function __construct()
+    protected $_where;
+
+    public function __construct(Where $where)
     {
-        $this->_where = new Where(); 
+        $this->_where = $where; 
     }
 
     public function assemble($what, $where)
     {
         return "SELECT {$what}"
             . " FROM {$where}" 
-            . $this->_getJoinString();
+            . $this->_getJoinString()
+            . $this->_where->assemble();
     }
 
     public function join($table, $alias = null)

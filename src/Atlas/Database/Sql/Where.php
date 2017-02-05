@@ -5,10 +5,13 @@ class Where
 {
     protected $_stack = array();
 
+    protected $_alias;
+
     protected $_ignoreEmptyValues = false;
 
-    public function __construct($ignoreEmptyValues = false)
+    public function __construct($alias = null, $ignoreEmptyValues = false)
     {
+        $this->_alias = $alias;
         $this->_ignoreEmptyValues = $ignoreEmptyValues;
     }
 
@@ -136,13 +139,19 @@ class Where
             return $this;
         }
 
+        if ($alias === null && $this->_alias !== null) {
+            /* Use default alias if none provided */
+            $alias = $this->_alias;
+        }
+
         if ($alias !== null) {
+            /* Generate prefix if alias exists */
             $prefix = $alias . '.';
         }
 
         $placeholder = is_array($values) ? '(?)' : '?';
 
-        $template = $prefix . $name . ' ' . $operator . ' ' . $placeholder;
+        $template =  $prefix . $name . ' ' . $operator . ' ' . $placeholder;
 
         return $this->addToStack($template, $values);
     }
