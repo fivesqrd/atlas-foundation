@@ -7,10 +7,10 @@ class Delete
 
     protected $_where;
 
-    public function __construct($table)
+    public function __construct($table, $where)
     {
         $this->_table = $table;
-        $this->_where = new Sql\Where(); 
+        $this->_where = $where;
     }
 
     public function assemble()

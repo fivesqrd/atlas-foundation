@@ -9,10 +9,11 @@ class Update
 
     protected $_data = array();
 
-    public function __construct($table, $data)
+    public function __construct($table, $data, $where)
     {
         $this->_table = $table;
-        $this->_where = new Sql\Where(); 
+        $this->_data = $data;
+        $this->_where = $where;
     }
 
     public function assemble()
@@ -35,7 +36,7 @@ class Update
             array_push($keys, "{$key} = ?");
         }
 
-        return implode(', ', $keys;
+        return implode(', ', $keys);
     }
 
     public function where()

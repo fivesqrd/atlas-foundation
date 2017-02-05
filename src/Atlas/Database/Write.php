@@ -49,10 +49,9 @@ class Write
     {
         $update = new Sql\Update(
             $this->_mapper->getTable(), 
-            $this->_mapper->extract($entity)
+            $this->_mapper->extract($entity),
+            (new Sql\Where())->isEqual($column, $entity->getId())
         );
-
-        $update->where()->isEqual($column, $entity->getId());
 
         $result = $this->execute($update);
         $entity->notify('change');
@@ -68,10 +67,9 @@ class Write
     public function delete($entity, $column = 'id')
     {
         $delete = new Sql\Delete(
-            $this->_mapper->getTable()
+            $this->_mapper->getTable(),
+            (new Sql\Where())->isEqual($column, $entity->getId())
         );
-
-        $delete->where()->isEqual($column, $entity->getId());
 
         $result = $this->execute($delete);
         $entity->notify('delete');
