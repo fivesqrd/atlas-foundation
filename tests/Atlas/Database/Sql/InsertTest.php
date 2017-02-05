@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Atlas\Factory
+ * @covers \Atlas\Database\Sql\Insert
  */
 class InsertTest extends TestCase
 {

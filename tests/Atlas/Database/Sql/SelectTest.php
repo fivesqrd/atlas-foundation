@@ -1,58 +1,63 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use Atlas\Database\Sql;
 
 /**
- * @covers \Atlas\Factory
+ * @covers \Atlas\Database\Sql\Select
  */
 class SelectTest extends TestCase
 {
+    protected $_select;
+
+    protected function setUp()
+    {
+        $this->_select = new Sql\Select(
+            new Sql\Where()
+        );
+    }
+
     public function testSimpleQueryIsReturningValidSql()
     {
-        $select = new Atlas\Database\Sql\Select();
-
         $this->assertEquals(
             'SELECT * FROM users',
-            $select->assemble('*', 'users') 
+            $this->_select->assemble('*', 'users') 
         );
     }
 
     public function testWhereClauseIsReturningValidSql()
     {
-        $select = new Atlas\Database\Sql\Select();
 
-        $select->where()->isEqual('email', 'me@mycompany.com');
+        $this->_select->where()->isEqual('email', 'me@mycompany.com');
 
         $this->assertEquals(
             'SELECT * FROM users WHERE (email = ?)',
-            $select->assemble('*', 'users')  . $select->where()->assemble()
+            $this->_select->assemble('*', 'users')
         );
     }
 
     public function testJoinIsReturningValidSql()
     {
-        $select = new Atlas\Database\Sql\Select();
-        $select->join('accounts', 'a')
+        $this->_select->join('accounts', 'a')
             ->on('u.account_id = a.id');
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id';
 
         $this->assertEquals(
-            $expected, $select->assemble('*', 'users AS u') 
+            $expected, $this->_select->assemble('*', 'users AS u') 
         );
     }
 
     public function testMultipleJoinsAreReturningValidSql()
     {
-        $select = new Atlas\Database\Sql\Select();
-        $select->join('accounts', 'a')
+        $this->_select->join('accounts', 'a')
             ->on('u.account_id = a.id');
-        $select->join('roles', 'r')
+        $this->_select->join('roles', 'r')
             ->on('u.role_id = r.id');
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id JOIN roles AS r ON u.role_id = r.id';
 
         $this->assertEquals(
-            $expected, $select->assemble('*', 'users AS u')
+            $expected, $this->_select->assemble('*', 'users AS u')
         );
     }
 }

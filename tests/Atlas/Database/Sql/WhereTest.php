@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Atlas\Factory
+ * @covers \Atlas\Database\Sql\Where
  */
 class WhereTest extends TestCase
 {

@@ -11,18 +11,14 @@ class ProxyTest extends TestCase
 {
     protected $_config = array(
         'read' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
         'write' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
     );
 
