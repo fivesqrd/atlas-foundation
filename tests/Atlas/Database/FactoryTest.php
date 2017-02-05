@@ -49,7 +49,7 @@ class FactoryTest extends TestCase
 
         $this->assertInstanceOf(
             Atlas\Database\Write::class,
-            $factory->write() 
+            $factory->write($resolver) 
         );
     }
 
@@ -79,27 +79,5 @@ class FactoryTest extends TestCase
             ->method('getAlias');
 
         $stub->getAlias();
-    }
-
-    public function testSelectMethodIsReturningValidObject()
-    {
-        $resolver = new Atlas\Database\Resolver('MockModelBarebones\User');
-
-        /*
-        $mapper = $this->getMockBuilder('User\Mapper')
-            ->setMethods(array('getAlias'))
-            ->getMock();
-
-        $mapper->method('getAlias')->willReturn('u');
-        */
-
-        $factory = new Atlas\Database\Factory(
-            $this->_config, $resolver 
-        );
-
-        $this->assertInstanceOf(
-            Atlas\Database\Select::class,
-            $factory->select() 
-        );
     }
 }

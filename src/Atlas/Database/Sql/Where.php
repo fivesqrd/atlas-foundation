@@ -1,5 +1,5 @@
 <?php
-namespace Atlast\Database\Select;
+namespace Atlas\Database\Sql;
 
 class Where
 {
@@ -14,59 +14,77 @@ class Where
 
     public function assemble()
     {
-        $sql = null;
-
-        foreach (array_keys($this->_stack) as $statement) {
-            array_push($sql, "({$statement})");
+        if (count($this->_stack) == 0) {
+            return null;
         }
 
-        return ' WHERE ' . implode(' AND ', $sql);
+        $clauses = array();
+
+        foreach ($this->_stack as $statement) {
+            array_push($clauses, "({$statement['template']})");
+        }
+
+        return ' WHERE ' . implode(' AND ', $clauses);
     }
 
     public function getBoundValues()
     {
-        return array_values($this->_stack);
+        $values = array();
+
+        foreach ($this->_stack as $statement) {
+            $values = array_merge(
+                $values, $statement['values']
+            );
+        }
+
+        return $values;
     }
 
     public function and($statement, $values)
     {
-        array_push($this->_stack, array(
-            $statement => $values
-        ));
-
-        return $this;
+        return $this->addToStack(
+            $statement, $values
+        );
     }
 
     public function isIn($name, array $values, $alias = null)
     {
-       return $this->addToStack($name, 'in (?)', $values, $alias);
+       return $this->parseAndStack(
+            $name, 'in', $values, $alias
+        );
     }
 
     public function isNotIn($name, array $values, $alias = null)
     {
-       return $this->addToStack($name, 'not in (?)', $values, $alias);
+       return $this->parseAndStack(
+            $name, 'not in', $values, $alias
+        );
     }
 
     public function isEqual($name, $value, $alias = null)
     {
-       return $this->addToStack($name, '=', '?', $value, $alias);
+       return $this->parseAndStack(
+            $name, '=', $value, $alias
+        );
     }
 
     public function isNotEqual($name, $value, $alias = null)
     {
-       return $this->addToStack($name, '!=', '?', $value, $alias);
+       return $this->parseAndStack(
+            $name, '!=', $value, $alias
+        );
     }
     
     public function isGreaterThan($name, $value, $orEquals = false, $alias = null)
     {
        $op = ($orEquals !== true) ? '>' : '>=';
-       return $this->addToStack($name, $op, '?', $value, $alias);
+       return $this->parseAndStack($name, $op, '?', $value, $alias);
     }
 
     public function isLessThan($name, $value, $orEquals = false, $alias = null)
     {
        $op = ($orEquals !== true) ? '<' : '<=';
-       return $this->addToStack($name, $op, '?', $value, $alias);
+       return $this->parseAndStack($name, $op, '?', $value, $alias);
     }
     
     public function isBetween($name, $start, $end, $alias = null)
@@ -77,7 +95,7 @@ class Where
     
     public function isLike($name, $value, $alias = null)
     {
-       return $this->addToStack($name, 'like', '?', '%' . $value . '%', $alias);
+       return $this->parseAndStack($name, 'like', '?', '%' . $value . '%', $alias);
     }
 
     public function __toString()
@@ -85,16 +103,6 @@ class Where
         return $this->getSql();
     }
 
-    public function addToStack($statement, $values)
-    {
-        if ($this->_ignore($statement, $values)) {
-            return $this;
-        }
-
-
-        return $this;
-    }
-    
     protected function _isEmpty($value)
     {
         if ($value === '' || $value === null) {
@@ -112,7 +120,7 @@ class Where
         if ($this->_ignoreEmptyValues === true && $this->_isEmpty($value)) {
             return true;
         }
-        
+
         if ($this->_ignoreEmptyValues === false && $this->_isEmpty($value)) {
             throw new Exception($name . ' value may not be empty');
         }
@@ -120,20 +128,34 @@ class Where
         return false;
     }
 
-    private function addToStack($name, $operator, $placeholder = '?', $value, $alias = null)
+    private function parseAndStack($name, $operator, $values, $alias = null)
     {
-        if ($this->_ignore($name, $value)) {
+        $prefix = null;
+
+        if ($this->_ignore($name, $values)) {
             return $this;
         }
 
-        if ($alias == null) {
-            $alias = $this->_alias;
+        if ($alias !== null) {
+            $prefix = $alias . '.';
         }
 
-        $template = $alias . '.' . $name . ' ' . $operator . ' ' . $placeholder;
+        $placeholder = is_array($values) ? '(?)' : '?';
+
+        $template = $prefix . $name . ' ' . $operator . ' ' . $placeholder;
+
+        return $this->addToStack($template, $values);
+    }
+
+    private function addToStack($template, $values)
+    {
+        if (!is_array($values)) {
+            $values = array($values);
+        }
 
         array_push($this->_stack, array(
-            $statement => $values
+            'template' => $template,
+            'values'   => $values
         ));
 
         return $this;

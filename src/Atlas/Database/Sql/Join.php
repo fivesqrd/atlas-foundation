@@ -1,11 +1,13 @@
 <?php
-namespace Atlast\Database\Select;
+namespace Atlas\Database\Sql;
 
 class Join
 {
     protected $_table;
 
     protected $_alias;
+
+    protected $_on;
 
     protected $_columns;
 
@@ -19,6 +21,7 @@ class Join
 
     public function on($value)
     {
+        $this->_on = $value;
         return $this;
     }
 
@@ -36,11 +39,15 @@ class Join
 
     public function assemble()
     {
+        if (empty($this->_on)) {
+            throw new Exception('Join statement requires ON clause');
+        }
+
         $string = null;
 
         return $this->_getTypeString()
             . "JOIN {$this->_getTableString()}"
-            . "ON {$on}";
+            . "ON {$this->_on}";
     }
 
     public function getAlias()
@@ -54,7 +61,9 @@ class Join
 
     protected function _getTableString()
     {
-        return $this->getAlias() . ' ' .  $this->_table . ' ';
+        return $this->_table 
+            . ' AS ' . $this->getAlias()
+            . ' ';
     }
 
     protected function _getTypeString()
@@ -65,3 +74,4 @@ class Join
 
         return $this->_type . ' ';
     }
+}

@@ -12,6 +12,7 @@ class Insert
     public function __construct($table, $data)
     {
         $this->_table = $table;
+        $this->_data  = $data;
     }
 
     public function assemble()
@@ -44,6 +45,6 @@ class Insert
             array_push($keys, '?');
         }
 
-        return implode(', ', $keys;
+        return implode(', ', $keys);
     }
 }

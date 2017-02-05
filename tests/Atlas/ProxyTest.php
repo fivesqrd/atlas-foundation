@@ -30,11 +30,9 @@ class ProxyTest extends TestCase
     {
         $resolver = new Atlas\Database\Resolver('MockModelBarebones\User');
 
-        $factory = new Atlas\Database\Factory(
-            $this->_config, $resolver
-        );
+        $factory = new Atlas\Database\Factory($this->_config);
 
-        $proxy = new Atlas\Proxy($factory);
+        $proxy = new Atlas\Proxy($factory, $resolver);
 
         $this->assertInstanceOf(
             'MockModelBarebones\User\Query',

@@ -21,12 +21,11 @@ class Write
      */
     public function save($entity, $column = 'id')
     {
-        if ($entity->getId() !== null)
-        {
+        if ($entity->getId() !== null) {
             $this->update($entity, $column);
-        } else {
-            $this->insert($entity, $column);
         }
+
+        $this->insert($entity, $column);
     
         return $entity->getId();
     }
@@ -88,7 +87,7 @@ class Write
 
         return $statement->execute(
             array_merge(
-                $sql->getBoundValues()
+                $sql->getBoundValues(),
                 $sql->where()->getBoundValues()
             )
         );
