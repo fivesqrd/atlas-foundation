@@ -81,18 +81,22 @@ class Fetch
     }
     
     /**
-     * @return Atom_Model
+     * @return Atom\Model\Entity
      */
     public function one()
     {
-        return $this->getStatement()->fetch();
+        return $this->_mapper->getEntity(
+            $this->getStatement()->fetch()
+        );
     }
     
     /**
-     * @return Atom_Model_Collection
+     * @return Atom\Model\Collection
      */
     public function all()
     {
-        return $this->getStatement()->fetchAll();
+        return $this->_mapper->getCollection(
+            $this->getStatement()->fetchAll()
+        );
     }
 }
