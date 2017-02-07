@@ -3,88 +3,91 @@ namespace Atlas\Database;
 
 class Write
 {
-    protected $_provider;
+    protected $_adapter;
 
     protected $_mapper;
 
-    public function __construct($config)
+    public function __construct($adapter, $mapper)
     {
-        $this->_provider = Provider::factory($config);
-    }
-
-    public function setMapper($object)
-    {
-        $this->_mapper = $object;
+        $this->_adapter = $adapter;
+        $this->_mapper = $mapper;
     }
 
     /**
      * @param string $table
      * @param array $data
-     * @param Atlas_Model_Entity $model
+     * @param Atom_Model_Entity $entity
      * @param string $pkField
      */
-    public function save($entity)
+    public function save($entity, $column = 'id')
     {
-        if ($model->getId() !== null)
-        {
-            $this->_update($entity);
-        } else {
-            $this->_insert($entity);
+        if ($entity->getId() !== null) {
+            $this->update($entity, $column);
         }
+
+        $this->insert($entity, $column);
+    
+        return $entity->getId();
+    }
+
+    public function insert($entity, $column)
+    {
+        $insert = new Sql\Insert(
+            $this->_mapper->getTable(),
+            $this->_mapper->extract($entity)
+        );
+
+        $result = $this->execute($insert);
+
+        $entity->setId($this->_adapter->lastInsertId());
+        $entity->notify('create');
 
         return $entity->getId();
     }
 
-    protected function _insert($entity)
+    public function update($entity, $column)
     {
-        $key = $this->_provider->insert(
+        $update = new Sql\Update(
             $this->_mapper->getTable(), 
-            $this->_mapper->getRow($entity)
-        )->execute();
+            $this->_mapper->extract($entity),
+            (new Sql\Where())->isEqual($column, $entity->getId())
+        );
 
-        $entity->setId($key);
-
-        $this->_notify($entity, 'create');
-
-        return $key;
-    }
-
-    protected function _update($entity)
-    {
-        $this->_provider->update(
-            $this->_mapper->getTable(), 
-            $this->_mapper->getRow($entity),
-            $this->_where($entity->getId())
-        )->execute();
-
-        $this->_notify($entity, 'update');
+        $result = $this->execute($update);
+        $entity->notify('change');
+        
+        return $entity->getId();
     }
     
     /**
      * @param string $table
-     * @param Atlas_Model_Entity $model
+     * @param Atom_Model_Entity $entity
      * @param string $pkField
      */
-    public function delete($entity)
+    public function delete($entity, $column = 'id')
     {
-        $result = $this->_provider
-            ->delete($this->_table, $this->_where($model->getId()))
-            ->execute();;
+        $delete = new Sql\Delete(
+            $this->_mapper->getTable(),
+            (new Sql\Where())->isEqual($column, $entity->getId())
+        );
 
-        $model->_notify($entity, 'delete');
+        $result = $this->execute($delete);
+        $entity->notify('delete');
 
         return $result;
     }
 
-    protected function _notify($entity, $action)
+    private function execute($sql)
     {
-        foreach ($entity->getObservers() as $observer) {
-            $observer->notify($entity, $action);
-        }
-    }
+        $statement = $this->_adapter->prepare(
+            $sql->assemble()
+        );
 
-    protected function _where($id)
-    {
-        return array($this->_mapper->getKey() => $id);
+        return $statement->execute(
+            array_merge(
+                $sql->getBoundValues(),
+                $sql->where()->getBoundValues()
+            )
+        );
     }
 }

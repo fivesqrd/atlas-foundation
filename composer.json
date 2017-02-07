@@ -1,11 +1,15 @@
 {
 	"name": "fivesqrd/atlas",
 	"description": "Simple Data Mapper Library",
-    "autoload": {
-        "classmap": ["src/Atlas"]
+	"require": {
     },
-    "version": "2.0.0",
-    "license": ["Five  License"],
+    "autoload": {
+        "psr-0": {
+            "Atlas": "src"
+        }
+    },
+    "version": "2.1.0",
+    "license": ["BSD License"],
     "authors": [
         {
             "name": "Christian Burger",

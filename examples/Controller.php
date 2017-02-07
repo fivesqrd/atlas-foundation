@@ -30,3 +30,6 @@ $query = Model\Score::query()
     ->scoreIs(15)
     ->fetch()->all();
 
+$users = Model\User::named($adapter)
+    ->getEnabled()
+    ->fetch()->all();
