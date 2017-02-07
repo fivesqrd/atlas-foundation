@@ -35,7 +35,7 @@ class Fetch
         return $this->_mapper->getAlias();
     }
 
-    protected function _getStatement($what)
+    public function getStatement($what)
     {
         $statement = $this->_adapter->prepare(
             $this->getSql($what)
