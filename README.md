@@ -115,10 +115,13 @@ $config = array(
 ### Bootstrap from MVC ###
 Atlas can be bootstrapped in your MVC framework by passing the Proxy class to your controllers/views via a plugin or helper:
 ```
+class MyControllerPlugin
+{
     public function model($class) {
         return new Atlas\Proxy(
-            new Atlas\Database\Factory($config),
+            new Atlas\Database\Factory($this->_config),
             new Atlas\Database\Resolver($class)
         );
     }
+}
 ```
