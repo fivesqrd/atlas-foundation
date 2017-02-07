@@ -27,7 +27,8 @@ class Factory
         return new \PDO(
             $this->_config[$mode]['dsn'],
             $this->_config[$mode]['username'],
-            $this->_config[$mode]['password']
+            $this->_config[$mode]['password'],
+            array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
         );
     }
 
