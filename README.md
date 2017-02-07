@@ -8,7 +8,6 @@ Atlas is a simple data mapper implementatin for PHP offering the following featu
 - Protection against SQL injection attacks
 - RDBMS abstraction
 
-
 ## Use cases ##
 Persisting a new user:
 ```
@@ -73,6 +72,9 @@ $count = $this->model(Model\User::class)->named()
 ## Implementation ##
 Each model consists of a set of classes. Each class extends a super class, to allow
 new models to be created with minimal effort. 
+
+### Install ###
+``` composer require fivesqrd/atlas:3.0 ```
 
 ### File Structure ###
 Below is an example what a project with 3 models might look like. For more details, have a look
