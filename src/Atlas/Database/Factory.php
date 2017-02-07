@@ -75,8 +75,6 @@ class Factory
 
     protected function _getSelect($mapper)
     {
-        return new Sql\Select(
-            new Sql\Where($mapper->getAlias())
-        );
+        return Sql\Select::factory($mapper->getAlias());
     }
 }

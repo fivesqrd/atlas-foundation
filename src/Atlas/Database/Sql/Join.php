@@ -3,75 +3,95 @@ namespace Atlas\Database\Sql;
 
 class Join
 {
-    protected $_table;
+    protected $_stack = array();
 
-    protected $_alias;
-
-    protected $_on;
-
-    protected $_columns;
-
-    protected $_type;
-
-    public function __construct($table, $alias = null)
+    public function inner($table, $alias, $on)
     {
-        $this->_table = $table;
-        $this->_alias = $alias;
+        return $this->addToStack($table, $on, $alias);
     }
 
-    public function on($value)
+    public function left($table, $alias, $on)
     {
-        $this->_on = $value;
-        return $this;
-    }
-
-    public function inner()
-    {
-        $this->_type = 'INNER';
-        return $this;
-    }
-
-    public function left()
-    {
-        $this->_type = 'LEFT';
-        return $this;
+        return $this->addToStack($table, $on, $alias, 'LEFT');
     }
 
     public function assemble()
     {
-        if (empty($this->_on)) {
-            throw new Exception('Join statement requires ON clause');
-        }
-
-        $string = null;
-
-        return $this->_getTypeString()
-            . "JOIN {$this->_getTableString()}"
-            . "ON {$this->_on}";
-    }
-
-    public function getAlias()
-    {
-        if ($this->_alias === null) { 
-            return $this->_table;
-        }
-
-        return $this->_alias;
-    }
-
-    protected function _getTableString()
-    {
-        return $this->_table 
-            . ' AS ' . $this->getAlias()
-            . ' ';
-    }
-
-    protected function _getTypeString()
-    {
-        if ($this->_type === null) {
+        if (empty($this->_stack)) {
             return null;
         }
 
-        return $this->_type . ' ';
+        $strings = array();
+
+        foreach ($this->_stack as $join) {
+            array_push($strings, $this->getJoinString($join));
+        }
+
+        return ' ' . implode(' ' , $strings);
+
+    }
+
+    private function getJoinString($params)
+    {
+        if (!array_key_exists('on', $params) || empty($params['on'])) {
+            throw new Exception('Join statement requires ON clause');
+        }
+
+        return $this->_getTypeString($params)
+            . "JOIN {$this->_getTableString($params)}"
+            . "ON {$params['on']}";
+    }
+
+    public function isJoined($alias)
+    {
+        if (array_key_exists($alias, $this->_stack)) {
+            return true;
+        } 
+
+        return false;
+    }
+
+    private function addToStack($table, $on, $alias = null, $type = null)
+    {
+        if ($this->isJoined($alias)) {
+            return false; /* TODO: figure out the appropriate response */
+        }
+
+        $params = array(
+            'table'   => $table,
+            'alias'   => $alias,
+            'type'    => $type,
+            'on'      => $on,
+            'columns' => null,
+        );
+
+        $alias = $this->_getAlias($params);
+
+        $this->_stack[$alias] = $params;
+    }
+
+    protected function _getAlias($params)
+    {
+        if (!array_key_exists('alias', $params) || $params['alias'] === null) { 
+            return $params['table'];
+        }
+
+        return $params['alias'];
+    }
+
+    protected function _getTableString($params)
+    {
+        return $params['table'] 
+            . ' AS ' . $this->_getAlias($params)
+            . ' ';
+    }
+
+    protected function _getTypeString($join)
+    {
+        if (!array_key_exists('type', $join) || $join['type'] === null) {
+            return null;
+        }
+
+        return $join['type'] . ' ';
     }
 }

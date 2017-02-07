@@ -1,4 +1,4 @@
-# Atlas Data Mapper Framework
+# Atlas - Simple Data Mapper Framework
 
 ## Config ##
 ```

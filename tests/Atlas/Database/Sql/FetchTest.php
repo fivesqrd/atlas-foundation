@@ -10,7 +10,7 @@ class FetchTest extends TestCase
 
     public function testGetSqlIsReturningValidSql()
     {
-        $select = new Sql\Select(new Sql\Where());
+        $select = Sql\Select::factory();
 
         $select->where()->isEqual('email', 'me@mycompany.com', 'u');
 
