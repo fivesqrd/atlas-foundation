@@ -1,4 +1,4 @@
-# Atlas 
+# Atlas Data Mapper
 
 Atlas is a simple data mapper implementatin for PHP offering the following features:
 - Minimal class constructioon required (new models are quickly ready to be used)
