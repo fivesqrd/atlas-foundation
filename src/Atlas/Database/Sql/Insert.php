@@ -27,11 +27,6 @@ class Insert
         return array_values($this->_data);
     }
 
-    public function where()
-    {
-        return $this->_where;
-    }
-
     protected function _getColumns()
     {
         return implode(', ', array_keys($this->_data));

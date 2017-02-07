@@ -56,7 +56,7 @@ class UpdateTest extends TestCase
         );
 
         $this->assertEquals(
-            array_values($this->_data),
+            array('Jack','Sparrow','me@mycompany.com',1),
             $update->getBoundValues() 
         );
     }

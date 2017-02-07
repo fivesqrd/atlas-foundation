@@ -84,10 +84,7 @@ class Write
         );
 
         return $statement->execute(
-            array_merge(
-                $sql->getBoundValues(),
-                $sql->where()->getBoundValues()
-            )
+            $sql->getBoundValues()
         );
     }
 }

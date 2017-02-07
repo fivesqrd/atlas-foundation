@@ -25,7 +25,10 @@ class Update
 
     public function getBoundValues()
     {
-        return array_values($this->_data);
+        return array_merge(
+            array_values($this->_data),
+            $this->_where->getBoundValues()
+        );
     }
 
     protected function _getPlaceholders()
