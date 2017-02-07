@@ -74,11 +74,14 @@ Each model consists of a set of classes. Each class extends a super class, to al
 new models to be created with minimal effort. 
 
 ### Install ###
-``` composer require fivesqrd/atlas:3.0 ```
+Via composer
+``` 
+php composer.phar require fivesqrd/atlas:3.0 
+```
 
 ### File Structure ###
 Below is an example what a project with 3 models might look like. For more details, have a look
-at these [examples|https://github.com/christianjburger/Atlas/tree/master/examples/Application/]
+at these [examples](https://github.com/christianjburger/Atlas/tree/master/examples/Application/)
 ```
 |- Model
    |-- User.php
