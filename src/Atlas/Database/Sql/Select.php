@@ -37,7 +37,7 @@ class Select
 
     public function getBoundValues()
     {
-        return $this->_where->getBoundValues(),
+        return $this->_where->getBoundValues();
     }
 
     public function join()
