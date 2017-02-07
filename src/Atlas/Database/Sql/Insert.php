@@ -27,14 +27,16 @@ class Insert
         return array_values($this->_data);
     }
 
-    public function where()
-    {
-        return $this->_where;
-    }
-
     protected function _getColumns()
     {
-        return implode(', ', array_keys($this->_data));
+        $columns = array();
+
+        foreach (array_keys($this->_data) as $key) {
+            /* todo: support identifiers of other RDMS' as well */
+            array_push($columns, "`{$key}`");
+        }
+
+        return implode(', ', $columns);
     }
 
     protected function _getPlaceholders()

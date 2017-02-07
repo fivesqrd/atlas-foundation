@@ -11,9 +11,7 @@ class SelectTest extends TestCase
 
     protected function setUp()
     {
-        $this->_select = new Sql\Select(
-            new Sql\Where()
-        );
+        $this->_select = Sql\Select::factory();
     }
 
     public function testSimpleQueryIsReturningValidSql()
@@ -37,8 +35,7 @@ class SelectTest extends TestCase
 
     public function testJoinIsReturningValidSql()
     {
-        $this->_select->join('accounts', 'a')
-            ->on('u.account_id = a.id');
+        $this->_select->join()->inner('accounts', 'a', 'u.account_id = a.id');
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id';
 
@@ -49,15 +46,37 @@ class SelectTest extends TestCase
 
     public function testMultipleJoinsAreReturningValidSql()
     {
-        $this->_select->join('accounts', 'a')
-            ->on('u.account_id = a.id');
-        $this->_select->join('roles', 'r')
-            ->on('u.role_id = r.id');
+        $this->_select->join()->inner('accounts', 'a', 'u.account_id = a.id');
+        $this->_select->join()->inner('roles', 'r', 'u.role_id = r.id');
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id JOIN roles AS r ON u.role_id = r.id';
 
         $this->assertEquals(
             $expected, $this->_select->assemble('*', 'users AS u')
+        );
+    }
+
+    public function testOrderClauseIsReturningValidSql()
+    {
+        $this->assertEquals(
+            'SELECT * FROM users ORDER BY id',
+            $this->_select->order('id')->assemble('*', 'users') 
+        );
+    }
+
+    public function testLimitClauseIsReturningValidSql()
+    {
+        $this->assertEquals(
+            'SELECT * FROM users ORDER BY id LIMIT 10',
+            $this->_select->order('id')->limit(10)->assemble('*', 'users') 
+        );
+    }
+
+    public function testLimitClauseWithOffsetIsReturningValidSql()
+    {
+        $this->assertEquals(
+            'SELECT * FROM users ORDER BY id LIMIT 5,10',
+            $this->_select->order('id')->limit(10, 5)->assemble('*', 'users') 
         );
     }
 }

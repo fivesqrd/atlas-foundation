@@ -6,12 +6,12 @@ use Atlas\Database as Database;
 abstract class Query
 {
     /**
-     * @var Atlas\Database\Select
+     * @var Atlas\Database\Sql\Select
      */
     protected $_select;
 
     /**
-     * @var Atlas\Mapper
+     * @var Atlas\Model\Mapper
      */
     protected $_mapper;
 
@@ -27,29 +27,29 @@ abstract class Query
     /**
      * @param int $count
      * @param int $offset
-     * @return Atom\Query
+     * @return Atom\Model\Query
      */
     public function limit($count, $offset = null)
     {
-        $this->_select()->sql()->limit($count, $offset);
+        $this->_select()->limit($count, $offset);
         return $this;
     }
 
     /**
      *
-     * @param string|array $spec See Zend_Db_Select::order();
-     * @return Atom\Query
+     * @param string|array $spec
+     * @return Atom\Model\Query
      */
     public function sort($spec)
     {
-        $this->_select()->sql()->order($spec);
+        $this->_select()->order($spec);
         return $this;
     }
 
     /**
      * Get the select object to add to the statement. 
      * Not exposed to user land
-     * @return Atlas\Database\Select
+     * @return Atlas\Database\Sql\Select
      */ 
     protected function _select()
     {
@@ -62,7 +62,7 @@ abstract class Query
      */ 
     public function toString()
     {
-        return $this->_select()->toString();
+        return $this->_select()->assemble();
     }
 
     /**
@@ -71,7 +71,7 @@ abstract class Query
      */ 
     public function fetch()
     {
-        return new Database\Fetch(
+        return new Database\Sql\Fetch(
             $this->_adapter, $this->_mapper, $this->_select
         );
     }

@@ -20,7 +20,7 @@ class Delete
 
     public function getBoundValues()
     {
-        return array();
+        return $this->_where->getBoundValues()
     }
 
     public function where()

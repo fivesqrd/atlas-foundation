@@ -3,32 +3,46 @@ namespace Atlas\Database\Sql;
 
 class Select
 {
-    protected $_joins = array();
+    protected $_join;
 
     protected $_where;
 
-    public function __construct(Where $where)
+    protected $_order;
+
+    protected $_limit;
+
+    public static function factory($alias = null)
     {
+        return new self(
+            new Join(), new Where($alias), new Order(), new Limit()
+        );
+    }
+
+    public function __construct(Join $join, Where $where, Order $order, Limit $limit)
+    {
+        $this->_join  = $join; 
         $this->_where = $where; 
+        $this->_order = $order; 
+        $this->_limit = $limit; 
     }
 
     public function assemble($what, $where)
     {
-        return "SELECT {$what}"
-            . " FROM {$where}" 
-            . $this->_getJoinString()
-            . $this->_where->assemble();
+        return "SELECT {$what} FROM {$where}"
+            . $this->_join->assemble()
+            . $this->_where->assemble()
+            . $this->_order->assemble()
+            . $this->_limit->assemble();
     }
 
-    public function join($table, $alias = null)
+    public function getBoundValues()
     {
-        if ($this->isJoined($alias)) {
-            return $this->getJoin($alias);
-        }
+        return $this->_where->getBoundValues();
+    }
 
-        $join = new Join($table, $alias);
-        $this->_joins[$join->getAlias()] = $join;
-        return $join; 
+    public function join()
+    {
+        return $this->_join;
     }
 
     public function where()
@@ -36,27 +50,16 @@ class Select
         return $this->_where;
     }
 
-    public function isJoined($alias)
+    public function limit($count, $offset = null)
     {
-        if (array_key_exists($alias, $this->_joins)) {
-            return true;
-        } 
-
-        return false;
+        $this->_limit->set($count, $offset);
+        return $this;
     }
-    
-    protected function _getJoinString()
+
+    public function order($spec)
     {
-        if (empty($this->_joins)) {
-            return null;
-        }
-
-        $strings = array();
-
-        foreach ($this->_joins as $join) {
-            array_push($strings, $join->assemble());
-        }
-
-        return ' ' . implode(' ' , $strings);
+        $this->_order->set($spec);
+        return $this;
     }
+
 }

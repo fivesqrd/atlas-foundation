@@ -25,7 +25,10 @@ class Update
 
     public function getBoundValues()
     {
-        return array_values($this->_data);
+        return array_merge(
+            array_values($this->_data),
+            $this->_where->getBoundValues()
+        );
     }
 
     protected function _getPlaceholders()
@@ -33,7 +36,8 @@ class Update
         $keys = array();
 
         foreach (array_keys($this->_data) as $key) {
-            array_push($keys, "{$key} = ?");
+            /* todo: support identifiers of other RDMS' as well */
+            array_push($keys, "`{$key}` = ?");
         }
 
         return implode(', ', $keys);

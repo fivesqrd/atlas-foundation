@@ -35,14 +35,14 @@ class Fetch
         return $this->_mapper->getAlias();
     }
 
-    protected function _getStatement($what)
+    public function getStatement($what = null)
     {
         $statement = $this->_adapter->prepare(
             $this->getSql($what)
         ); 
 
         $statement->execute(
-            $this->_select->where()->getBoundValues()
+            $this->_select->getBoundValues()
         );
 
         return $statement;
@@ -66,7 +66,7 @@ class Fetch
     {
         $what = "COUNT(distinct {$this->_getAlias()}.id)";
 
-        return $this->_getStatement($what)->fetchColumn(0);
+        return $this->getStatement($what)->fetchColumn(0);
     }
 
     /**
@@ -77,22 +77,26 @@ class Fetch
     {
         $what = "SUM({$this->_getAlias()}.{$column})";
 
-        return $this->_getStatement($what)->fetchColumn(0);
+        return $this->getStatement($what)->fetchColumn(0);
     }
     
     /**
-     * @return Atom_Model
+     * @return Atom\Model\Entity
      */
     public function one()
     {
-        return $this->_getStatement()->fetch();
+        return $this->_mapper->getEntity(
+            $this->getStatement()->fetch()
+        );
     }
     
     /**
-     * @return Atom_Model_Collection
+     * @return Atom\Model\Collection
      */
     public function all()
     {
-        return $this->_getStatement()->fetchAll();
+        return $this->_mapper->getCollection(
+            $this->getStatement()->fetchAll()
+        );
     }
 }

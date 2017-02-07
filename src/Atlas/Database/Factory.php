@@ -27,7 +27,8 @@ class Factory
         return new \PDO(
             $this->_config[$mode]['dsn'],
             $this->_config[$mode]['username'],
-            $this->_config[$mode]['password']
+            $this->_config[$mode]['password'],
+            array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
         );
     }
 
@@ -35,8 +36,8 @@ class Factory
     {
         $mapper = $resolver->mapper();
 
-        $select = $this->_getSelect($mapper)->where()
-            ->isEqual('id', $key);
+        $select = $this->_getSelect($mapper);
+        $select->where()->isEqual('id', $key);
 
         return new Sql\Fetch(
             $this->adapter('read'), $mapper, $select
@@ -75,8 +76,6 @@ class Factory
 
     protected function _getSelect($mapper)
     {
-        return new Sql\Select(
-            new Sql\Where($mapper->getAlias())
-        );
+        return Sql\Select::factory($mapper->getAlias());
     }
 }
