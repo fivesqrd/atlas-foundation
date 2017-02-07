@@ -66,7 +66,7 @@ class Fetch
     {
         $what = "COUNT(distinct {$this->_getAlias()}.id)";
 
-        return $this->_getStatement($what)->fetchColumn(0);
+        return $this->getStatement($what)->fetchColumn(0);
     }
 
     /**
@@ -77,7 +77,7 @@ class Fetch
     {
         $what = "SUM({$this->_getAlias()}.{$column})";
 
-        return $this->_getStatement($what)->fetchColumn(0);
+        return $this->getStatement($what)->fetchColumn(0);
     }
     
     /**
@@ -85,7 +85,7 @@ class Fetch
      */
     public function one()
     {
-        return $this->_getStatement()->fetch();
+        return $this->getStatement()->fetch();
     }
     
     /**
@@ -93,6 +93,6 @@ class Fetch
      */
     public function all()
     {
-        return $this->_getStatement()->fetchAll();
+        return $this->getStatement()->fetchAll();
     }
 }

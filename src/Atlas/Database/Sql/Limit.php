@@ -33,11 +33,11 @@ class Limit
         $values = array();
 
         if ($this->_offset !== null) {
-            array_push($values, $this->_offset);
+            array_push($values, (int) $this->_offset);
         }
 
         if ($this->_limit !== null) {
-            array_push($values, $this->_limit);
+            array_push($values, (int) $this->_limit);
         }
 
         return $values;
