@@ -9,8 +9,8 @@ class Limit
 
     public function set($limit, $offset = null)
     {
-        $this->_limit = $limit;
-        $this->_offset = $offset;
+        $this->_limit = (int) $limit;
+        $this->_offset = (int) $offset;
     }
 
     public function assemble()
@@ -22,25 +22,9 @@ class Limit
         }
 
         if ($this->_offset !== null) {
-            $offset = '?,';
+            $offset = $this->_offset . ',';
         }
 
-        return ' LIMIT ' . $offset . '?';
+        return ' LIMIT ' . $offset . $this->_limit;
     }
-
-    public function getBoundValues()
-    {
-        $values = array();
-
-        if ($this->_offset !== null) {
-            array_push($values, (int) $this->_offset);
-        }
-
-        if ($this->_limit !== null) {
-            array_push($values, (int) $this->_limit);
-        }
-
-        return $values;
-    }
-    
 }

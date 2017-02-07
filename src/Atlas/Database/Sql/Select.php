@@ -37,10 +37,7 @@ class Select
 
     public function getBoundValues()
     {
-        return array_merge(
-            $this->_where->getBoundValues(),
-            $this->_limit->getBoundValues()
-        );
+        return $this->_where->getBoundValues(),
     }
 
     public function join()
