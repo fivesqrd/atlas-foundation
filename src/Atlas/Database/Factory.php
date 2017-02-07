@@ -36,8 +36,8 @@ class Factory
     {
         $mapper = $resolver->mapper();
 
-        $select = $this->_getSelect($mapper)->where()
-            ->isEqual('id', $key);
+        $select = $this->_getSelect($mapper);
+        $select->where()->isEqual('id', $key);
 
         return new Sql\Fetch(
             $this->adapter('read'), $mapper, $select
