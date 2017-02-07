@@ -5,7 +5,7 @@ Atlas is a simple data mapper implementation for PHP. The primary focus is to cr
 The framework offers the following features:
 - Minimal construction required (creating new models is quick and easy)
 - Easily create business logic query layer
-- Reduced schema chang ripples
+- Reduced application wide ripples from schema changes
 - Automatic read/write routing
 - Protection against SQL injection attacks
 - RDBMS abstraction
