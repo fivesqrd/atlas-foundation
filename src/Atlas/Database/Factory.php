@@ -24,27 +24,21 @@ class Factory
             throw new Exception("Malformed db adapter {$mode} config specified");
         }
 
-        return new \Zend_Db_Adapter_Pdo_Mysql(
-            $this->_config[$mode]
-        );
-    }
-
-    public function select($resolver, $ignoreEmptyValues = false)
-    {
-        return new Select(
-            new \Zend_Db_Select($this->adapter('read')),
-            $resolver->mapper()->getAlias(), 
-            $ignoreEmptyValues
+        return new \PDO(
+            $this->_config[$mode]['dsn'],
+            $this->_config[$mode]['username'],
+            $this->_config[$mode]['password']
         );
     }
 
     public function fetch($resolver, $key)
     {
         $mapper = $resolver->mapper();
-        $select = $this->select($resolver, $mapper->getAlias())
+
+        $select = $this->_getSelect($mapper)->where()
             ->isEqual('id', $key);
 
-        return new Fetch(
+        return new Sql\Fetch(
             $this->adapter('read'), $mapper, $select
         );
     }
@@ -65,10 +59,10 @@ class Factory
     
     public function query($resolver, $ignoreEmptyValues = false)
     {
+        $mapper = $resolver->mapper();
+
         return $resolver->query(
-            $this->adapter('read'), 
-            $resolver->mapper(), 
-            $this->select($resolver, $ignoreEmptyValues)
+            $this->adapter('read'), $mapper, $this->_getSelect($mapper)
         );
     }
 
@@ -76,6 +70,13 @@ class Factory
     {
         return new Write(
             $this->adapter('write'), $resolver->mapper() 
+        );
+    }
+
+    protected function _getSelect($mapper)
+    {
+        return new Sql\Select(
+            new Sql\Where($mapper->getAlias())
         );
     }
 }

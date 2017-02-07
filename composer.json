@@ -2,15 +2,14 @@
 	"name": "fivesqrd/atlas",
 	"description": "Simple Data Mapper Library",
 	"require": {
-        "zendframework/zendframework1": "^1.12"
     },
     "autoload": {
         "psr-0": {
             "Atlas": "src"
         }
     },
-    "version": "2.0.0",
-    "license": ["Five Squared License"],
+    "version": "2.1.0",
+    "license": ["BSD License"],
     "authors": [
         {
             "name": "Christian Burger",

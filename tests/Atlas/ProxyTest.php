@@ -11,18 +11,14 @@ class ProxyTest extends TestCase
 {
     protected $_config = array(
         'read' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
         'write' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
     );
 
@@ -30,11 +26,9 @@ class ProxyTest extends TestCase
     {
         $resolver = new Atlas\Database\Resolver('MockModelBarebones\User');
 
-        $factory = new Atlas\Database\Factory(
-            $this->_config, $resolver
-        );
+        $factory = new Atlas\Database\Factory($this->_config);
 
-        $proxy = new Atlas\Proxy($factory);
+        $proxy = new Atlas\Proxy($factory, $resolver);
 
         $this->assertInstanceOf(
             'MockModelBarebones\User\Query',

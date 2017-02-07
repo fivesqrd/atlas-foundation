@@ -10,18 +10,14 @@ class FactoryTest extends TestCase
 {
     protected $_config = array(
         'read' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
         'write' => array(
-            'driver'   => 'Pdo_Mysql',
-            'dbname'   => 'tact',
+            'dsn'      => 'sqlite::memory:',
             'username' => 'username',
             'password' => 'password',
-            'host'     => '192.168.254.10'
         ),
     );
     
@@ -49,11 +45,11 @@ class FactoryTest extends TestCase
 
         $this->assertInstanceOf(
             Atlas\Database\Write::class,
-            $factory->write() 
+            $factory->write($resolver) 
         );
     }
 
-    public function testAdapterMethodIsReturningValidObject()
+    public function testAdapterMethodIsReturningPdoObject()
     {
         $resolver = new Atlas\Database\Resolver('MockModelBarebones\User');
 
@@ -62,7 +58,7 @@ class FactoryTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            'Zend_Db_Adapter_Pdo_Mysql',
+            'PDO',
             $factory->adapter('read') 
         );
     }
@@ -79,27 +75,5 @@ class FactoryTest extends TestCase
             ->method('getAlias');
 
         $stub->getAlias();
-    }
-
-    public function testSelectMethodIsReturningValidObject()
-    {
-        $resolver = new Atlas\Database\Resolver('MockModelBarebones\User');
-
-        /*
-        $mapper = $this->getMockBuilder('User\Mapper')
-            ->setMethods(array('getAlias'))
-            ->getMock();
-
-        $mapper->method('getAlias')->willReturn('u');
-        */
-
-        $factory = new Atlas\Database\Factory(
-            $this->_config, $resolver 
-        );
-
-        $this->assertInstanceOf(
-            Atlas\Database\Select::class,
-            $factory->select() 
-        );
     }
 }
