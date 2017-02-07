@@ -1,7 +1,7 @@
 <?php
-namespace Aplication\Model\Customer;
+namespace Application\Model\Contact;
 
-class Mapper extends \Atlas\Mapper
+class Mapper extends \Atlas\Model\Mapper
 {
 	protected $_alias = null;
 
@@ -18,11 +18,11 @@ class Mapper extends \Atlas\Mapper
 
 	public function getEntity($row)
 	{
-		return new Entity($this->_populate($row);
+		return new Entity($this->_populate($row));
 	}
 
 	public function getCollection($rows)
 	{
-		return new Collection($rows);
+		return new Collection($rows, $this);
 	}
 }
