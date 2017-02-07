@@ -9,7 +9,15 @@ Atlas is a simple data mapper implementatin for PHP offering the following featu
 - RDBMS abstraction
 
 
-## Use cases ## 
+## Use cases ##
+Persisting a new user:
+```
+$user = Model\User();
+$user->set('_email', 'user@domain.com');
+$user->set('_enabled', true);
+$id = $this->model(Model\User::class)->save($user);
+```
+
 Fetching an instance of the user model by primary key:
 ```
 $user = $this->model(Model\User::class)->fetch($id);
@@ -23,14 +31,6 @@ $timestamp = $user->get('_lastLogin');
 Access properties using custom getters:
 ```
 $date = $user->getLastLogin('Y-m-d');
-```
-
-Persisting a new user:
-```
-$user = Model\User();
-$user->set('_email', 'user@domain.com');
-$user->set('_enabled', true);
-$this->model(Model\User::class)->save($user);
 ```
 
 Persisting changes to the user model using default setters:
@@ -113,7 +113,7 @@ $config = array(
 ```
 
 ### Bootstrap from MVC ###
-Atlas can be bootstrapped in your MVC framework by passing the Proxy class to your controllers/views via a plugin or helper,:
+Atlas can be bootstrapped in your MVC framework by passing the Proxy class to your controllers/views via a plugin or helper:
 ```
     public function model($class) {
         return new Atlas\Proxy(
