@@ -20,7 +20,7 @@ class UpdateTest extends TestCase
         );
 
         $this->assertEquals(
-            'UPDATE users SET name = ?, surname = ?, email = ?',
+            'UPDATE users SET `name` = ?, `surname` = ?, `email` = ?',
             $update->assemble() 
         );
     }
@@ -44,7 +44,7 @@ class UpdateTest extends TestCase
         );
 
         $this->assertEquals(
-            'UPDATE users SET name = ?, surname = ?, email = ? WHERE (id = ?)',
+            'UPDATE users SET `name` = ?, `surname` = ?, `email` = ? WHERE (id = ?)',
             $update->assemble() 
         );
     }

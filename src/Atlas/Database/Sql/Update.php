@@ -36,7 +36,8 @@ class Update
         $keys = array();
 
         foreach (array_keys($this->_data) as $key) {
-            array_push($keys, "{$key} = ?");
+            /* todo: support identifiers of other RDMS' as well */
+            array_push($keys, "`{$key}` = ?");
         }
 
         return implode(', ', $keys);

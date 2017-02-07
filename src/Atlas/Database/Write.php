@@ -25,12 +25,12 @@ class Write
             $this->update($entity, $column);
         }
 
-        $this->insert($entity, $column);
+        $this->insert($entity);
     
         return $entity->getId();
     }
 
-    public function insert($entity, $column)
+    public function insert($entity)
     {
         $insert = new Sql\Insert(
             $this->_mapper->getTable(),

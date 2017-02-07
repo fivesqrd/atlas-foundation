@@ -17,7 +17,7 @@ class InsertTest extends TestCase
         $insert = new Atlas\Database\Sql\Insert('users', $data);
 
         $this->assertEquals(
-            'INSERT INTO users (name, surname, email) VALUES (?, ?, ?)',
+            'INSERT INTO users (`name`, `surname`, `email`) VALUES (?, ?, ?)',
             $insert->assemble() 
         );
 
