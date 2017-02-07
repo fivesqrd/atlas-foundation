@@ -21,7 +21,7 @@ class Limit
             return null;
         }
 
-        if ($this->_offset !== null) {
+        if ($this->_offset !== null && $this->_offset != 0) {
             $offset = $this->_offset . ',';
         }
 

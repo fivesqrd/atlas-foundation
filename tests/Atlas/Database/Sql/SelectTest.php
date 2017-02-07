@@ -67,7 +67,7 @@ class SelectTest extends TestCase
     public function testLimitClauseIsReturningValidSql()
     {
         $this->assertEquals(
-            'SELECT * FROM users ORDER BY id LIMIT ?',
+            'SELECT * FROM users ORDER BY id LIMIT 10',
             $this->_select->order('id')->limit(10)->assemble('*', 'users') 
         );
     }
@@ -75,7 +75,7 @@ class SelectTest extends TestCase
     public function testLimitClauseWithOffsetIsReturningValidSql()
     {
         $this->assertEquals(
-            'SELECT * FROM users ORDER BY id LIMIT ?,?',
+            'SELECT * FROM users ORDER BY id LIMIT 5,10',
             $this->_select->order('id')->limit(10, 5)->assemble('*', 'users') 
         );
     }
