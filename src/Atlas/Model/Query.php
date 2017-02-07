@@ -6,12 +6,12 @@ use Atlas\Database as Database;
 abstract class Query
 {
     /**
-     * @var Atlas\Database\Select
+     * @var Atlas\Database\Sql\Select
      */
     protected $_select;
 
     /**
-     * @var Atlas\Mapper
+     * @var Atlas\Model\Mapper
      */
     protected $_mapper;
 
@@ -71,7 +71,7 @@ abstract class Query
      */ 
     public function fetch()
     {
-        return new Database\Fetch(
+        return new Database\Sql\Fetch(
             $this->_adapter, $this->_mapper, $this->_select
         );
     }
