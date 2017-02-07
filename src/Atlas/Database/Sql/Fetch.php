@@ -42,7 +42,7 @@ class Fetch
         ); 
 
         $statement->execute(
-            $this->_select->where()->getBoundValues()
+            $this->_select->getBoundValues()
         );
 
         return $statement;
