@@ -1,12 +1,12 @@
 <?php
-namespace Application\Model\User;
+namespace Application\Model\Customer;
 
 class Collection extends \Atlas\Model\Collection
 {
 
     public function getTargetClass()
     {
-        return '\\Application\\Model\\User';
+        return '\\Application\\Model\\Customer';
     }
     
 }

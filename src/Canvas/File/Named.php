@@ -45,7 +45,7 @@ class Named
     {
         return "public function all()"
             . "\n{"
-            . "\n\treturn this->_query();"
+            . "\n    return this->_query();"
             . "\n}";
     }
 }

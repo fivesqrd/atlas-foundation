@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Contact;
+namespace Application\Model\Customer;
 
 class Named extends \Atlas\Model\Named
 {

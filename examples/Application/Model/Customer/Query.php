@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Company;
+namespace Application\Model\Customer;
 
 class Query extends \Atlas\Model\Query
 {
