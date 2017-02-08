@@ -76,15 +76,7 @@ Each model consists of a set of classes. Each class extends a super class, to al
 new models to be created with minimal effort. 
 
 ### Using Canvas ###
-The atlas repo ships with a script to quickly create the scaffolding required for new models. Canvas
-can be configured to remember the model directory and namespace:
-```
-cd /myproject
-mkdir .atlas
-cp vendor/fivesqrd/atlas/scripts/.atlas/config.php .atlas/config.php
-```
-
-Once configured canvas can be used from the project root to create models with one command:
+The atlas repo ships with a script to quickly create the scaffolding required for new models.
 ```
 php vendor/fivesqrd/atlas/scripts/Canvas.php User
 php vendor/fivesqrd/atlas/scripts/Canvas.php Customer
@@ -117,10 +109,21 @@ at these [examples](https://github.com/christianjburger/Atlas/tree/master/exampl
 ### Install ###
 Via composer
 ``` 
+cd /myproject
 php composer.phar require fivesqrd/atlas:3.0 
 ```
 
+### Canvas ###
+Configure canvas to remember project specific settings, such as path to model classes and namespace:
+```
+cd /myproject
+mkdir .atlas
+cp vendor/fivesqrd/atlas/scripts/.atlas/config.php .atlas/config.php
+vi .atlas/config.php
+```
+
 ### Config ###
+Add the following config to your project:
 ```
 $config = array(
     'read' => array(
@@ -137,7 +140,7 @@ $config = array(
 ```
 
 ### Bootstrap from MVC ###
-Atlas can be bootstrapped in your MVC framework by passing the Proxy class to your controllers/views via a plugin or helper:
+Atlas can be bootstrapped from within your MVC framework by passing the Proxy class to your controllers/views via a plugin or helper:
 ```
 class MyControllerPlugin
 {
