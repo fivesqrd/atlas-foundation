@@ -10,8 +10,8 @@ class Mapper extends \Atlas\Model\Mapper
     protected $_key = 'id';
 
     protected $_map = array(
-		'_id' => 'id'
-	);
+        '_id' => 'id'
+    );
 
     protected $_readOnly = array('id');
 
