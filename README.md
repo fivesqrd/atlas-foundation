@@ -2,7 +2,7 @@
 
 Atlas is an open source [data mapper](https://en.wikipedia.org/wiki/Data_mapper_pattern) implementation for PHP. 
 
-Atlas creates barebones models for your project with minimal effort, allowing you to start working with them quickly. Spend time on extending or customising functionality only when required. 
+Atlas creates barebones models for your project with minimal effort, allowing you to start working with them quickly. Extending or customising functionality is possible, but can wait until it is required. 
 
 The framework offers the following features:
 - Minimal scaffolding required to create new models
