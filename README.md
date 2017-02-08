@@ -3,8 +3,8 @@
 Atlas is a simple data mapper implementation for PHP. The primary focus is to create new models quickly and easily. 
 
 The framework offers the following features:
-- Minimal construction required (creating new models is quick and easy)
-- Easily create business logic query layer
+- Minimal scaffolding required to create new models
+- Easily expose business logic query layer
 - Reduced application wide ripples from schema changes
 - Automatic read/write routing
 - Protection against SQL injection attacks
@@ -81,6 +81,47 @@ The atlas repo ships with a script to quickly create the scaffolding required fo
 php vendor/fivesqrd/atlas/scripts/Canvas.php User
 php vendor/fivesqrd/atlas/scripts/Canvas.php Customer
 php vendor/fivesqrd/atlas/scripts/Canvas.php Contact
+```
+
+Update the Mapper class with the table details 
+```
+<?php
+namespace Application\Model\User;
+
+class Mapper extends \Atlas\Model\Mapper
+{
+    protected $_alias = 'u';
+
+    protected $_table = 'users';
+
+    protected $_key = 'id';
+
+    protected $_map = array(
+        '_id'        => 'id',
+        '_email'     => 'email',
+        '_password   => 'password',
+        '_lastLogin' => 'last_login'
+    );
+
+    protected $_readOnly = array('id');
+}
+```
+
+Update the Entity class with the mapped properties 
+```
+<?php
+namespace Application\Model\User;
+
+class Entity extends \Atlas\Model\Entity
+{
+    protected $_id;
+    
+    protected $_email;
+    
+    protected $_password;
+    
+    protected $_lastLogin;
+}
 ```
 
 ### File Structure ###
