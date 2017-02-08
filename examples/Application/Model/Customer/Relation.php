@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Company;
+namespace Application\Model\Customer;
 
 class Relation extends \Atlas\Model\Relation
 {

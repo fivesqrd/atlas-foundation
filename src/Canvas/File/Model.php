@@ -35,25 +35,6 @@ class Model
 
     public function getMethods()
     {
-        return array(
-            //$this->_getMapper(),
-            //$this->_getQuery(),
-        );
-    }
-
-    protected function _getMapper()
-    {
-        return "public function mapper()"
-            . "\n{"
-            . "\n\treturn new {$this->_model}\\Mapper();"
-            . "\n}\n";
-    }
-
-    protected function _getQuery()
-    {
-        return "public function query(\$adapter)"
-            . "\n{"
-            . "\n\treturn new {$this->_model}\\Query(\$adapter);"
-            . "\n}\n";
+        return array();
     }
 }

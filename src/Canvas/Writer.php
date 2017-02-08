@@ -34,7 +34,7 @@ class Writer
         $string = null;
 
         foreach ($properties as $property) {
-            $string .= "\n\t{$property['type']} \${$property['name']} = {$property['value']};\n";
+            $string .= "\n    {$property['type']} \${$property['name']} = {$property['value']};\n";
         }
 
         return $string;
@@ -45,7 +45,7 @@ class Writer
         $string = null;
 
         foreach ($methods as $method) {
-            $string .= "\n\n\t" . str_replace("\n","\n\t", $method);
+            $string .= "\n\n    " . str_replace("\n","\n    ", $method);
         }
 
         return $string;

@@ -51,7 +51,7 @@ class Mapper
     {
         return "public function getEntity(\$row)"
             . "\n{"
-            . "\n\treturn new Entity(\$this->_populate(\$row));"
+            . "\n    return new Entity(\$this->_populate(\$row));"
             . "\n}";
     }
 
@@ -59,7 +59,7 @@ class Mapper
     {
         return "public function getCollection(\$rows)"
             . "\n{"
-            . "\n\treturn new Collection(\$rows, \$this);"
+            . "\n    return new Collection(\$rows, \$this);"
             . "\n}";
     }
 }

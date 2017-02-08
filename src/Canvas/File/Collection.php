@@ -47,7 +47,7 @@ class Collection
 
         return "public function getTargetClass()"
             . "\n{"
-            . "\n\treturn '{$class}';"
+            . "\n    return '{$class}';"
             . "\n}\n";
     }
 }

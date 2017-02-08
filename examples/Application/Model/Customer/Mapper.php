@@ -1,5 +1,5 @@
 <?php
-namespace Application\Model\Contact;
+namespace Application\Model\Customer;
 
 class Mapper extends \Atlas\Model\Mapper
 {
