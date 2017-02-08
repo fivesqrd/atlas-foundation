@@ -75,10 +75,20 @@ $count = $this->model(Model\User::class)->named()
 Each model consists of a set of classes. Each class extends a super class, to allow
 new models to be created with minimal effort. 
 
-### Install ###
-Via composer
-``` 
-php composer.phar require fivesqrd/atlas:3.0 
+### Using Canvas ###
+The atlas repo ships with a script to quickly create the scaffolding required for new models. Canvas
+can be configured to remember the model directory and namespace:
+```
+cd /myproject
+mkdir .atlas
+cp vendor/fivesqrd/atlas/scripts/.atlas/config.php .atlas/config.php
+```
+
+Once configured canvas can be used from the project root to create models with one command:
+```
+php vendor/fivesqrd/atlas/scripts/Canvas.php User
+php vendor/fivesqrd/atlas/scripts/Canvas.php Customer
+php vendor/fivesqrd/atlas/scripts/Canvas.php Contact
 ```
 
 ### File Structure ###
@@ -102,8 +112,15 @@ at these [examples](https://github.com/christianjburger/Atlas/tree/master/exampl
        ...
 ```
 
+## Install and Setup ##
+
+### Install ###
+Via composer
+``` 
+php composer.phar require fivesqrd/atlas:3.0 
+```
+
 ### Config ###
-Atlas can automatically split read and write statements. Simply provide the database connection configs as below.
 ```
 $config = array(
     'read' => array(
