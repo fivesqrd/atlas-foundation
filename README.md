@@ -1,6 +1,8 @@
 # Atlas Data Mapper
 
-Atlas is an open source data mapper implementation for PHP. The primary focus is to create new models quickly and easily. 
+Atlas is an open source [data mapper](https://en.wikipedia.org/wiki/Data_mapper_pattern) implementation for PHP. 
+
+Atlas adds new models to your project with minimal effort, allowing you to work with them sooner. 
 
 The framework offers the following features:
 - Minimal scaffolding required to create new models
@@ -31,11 +33,6 @@ Access properties using default getters:
 $timestamp = $user->get('_lastLogin');
 ```
 
-Access properties using custom getters:
-```
-$date = $user->getLastLogin('Y-m-d');
-```
-
 Persisting changes to the user model using default setters:
 ```
 /* Fetch from db */
@@ -43,19 +40,6 @@ $user = $this->model(Model\User::class)->fetch($id);
 
 /* Update entity */
 $user->set('_lastLogin', time());
-
-/* Save to db */
-$this->model(Model\User::class)->save($user);
-```
-
-Persisting changes using custom setters:
-```
-/* Fetch from db */
-$user = $this->model(Model\User::class)->fetch($id);
-
-/* Update entity */
-$user->setEmailAddress('user@domain.com');
-$user->setEnabled(true);
 
 /* Save to db */
 $this->model(Model\User::class)->save($user);
@@ -73,6 +57,33 @@ foreach ($users as $user) {
 }
 ```
 
+Optimised queries for simple operations like counts:
+```
+$count = $this->model(Model\User::class)->named()
+    ->withRecentLogIn()
+    -fetch()->count();
+```
+
+## Extending Model Classes ##
+
+Access properties using custom getters:
+```
+$date = $user->getLastLogin('Y-m-d');
+```
+
+Persisting changes using custom setters:
+```
+/* Fetch from db */
+$user = $this->model(Model\User::class)->fetch($id);
+
+/* Update entity */
+$user->setEmailAddress('user@domain.com');
+$user->setEnabled(true);
+
+/* Save to db */
+$this->model(Model\User::class)->save($user);
+```
+
 Using named queries for consistent results:
 ```
 $users = $this->model(Model\User::class)->named()
@@ -80,11 +91,21 @@ $users = $this->model(Model\User::class)->named()
     -fetch()->all();
 ```
 
-Optimised queries for simple operations like counts:
+Adding to named queries on the fly:
 ```
-$count = $this->model(Model\User::class)->named()
+$users = $this->model(Model\User::class)->named()
     ->withRecentLogIn()
-    -fetch()->count();
+    ->isEnabled(true)
+    -fetch()->all();
+```
+
+Performing operations on collections:
+```
+$users = $this->model(Model\User::class)->named()
+    ->withRecentLogIn()
+    -fetch()->all();
+    
+$emails = $users->getAllEmailAddresses();
 ```
 
 ## Implementation ##
