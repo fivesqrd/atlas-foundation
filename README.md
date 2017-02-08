@@ -1,6 +1,6 @@
 # Atlas Data Mapper
 
-Atlas is a simple data mapper implementation for PHP. The primary focus is to create new models quickly and easily. 
+Atlas is an open source data mapper implementation for PHP. The primary focus is to create new models quickly and easily. 
 
 The framework offers the following features:
 - Minimal scaffolding required to create new models
