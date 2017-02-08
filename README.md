@@ -10,7 +10,7 @@ The framework offers the following features:
 - Protection against SQL injection attacks
 - RDBMS abstraction
 
-## Use cases ##
+## Use Cases ##
 Persisting a new user:
 ```
 $user = new Model\User\Entity();
