@@ -13,9 +13,11 @@ The framework offers the following features:
 ## Use cases ##
 Persisting a new user:
 ```
-$user = Model\User();
+$user = Model\User\Entity();
 $user->set('_email', 'user@domain.com');
 $user->set('_enabled', true);
+
+/* Save to db */
 $id = $this->model(Model\User::class)->save($user);
 ```
 
@@ -36,16 +38,26 @@ $date = $user->getLastLogin('Y-m-d');
 
 Persisting changes to the user model using default setters:
 ```
+/* Fetch from db */
 $user = $this->model(Model\User::class)->fetch($id);
+
+/* Update entity */
 $user->set('_lastLogin', time());
+
+/* Save to db */
 $this->model(Model\User::class)->save($user);
 ```
 
 Persisting changes using custom setters:
 ```
+/* Fetch from db */
 $user = $this->model(Model\User::class)->fetch($id);
+
+/* Update entity */
 $user->setEmailAddress('user@domain.com');
 $user->setEnabled(true);
+
+/* Save to db */
 $this->model(Model\User::class)->save($user);
 ```
 
