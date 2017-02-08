@@ -13,7 +13,7 @@ The framework offers the following features:
 ## Use cases ##
 Persisting a new user:
 ```
-$user = Model\User\Entity();
+$user = new Model\User\Entity();
 $user->set('_email', 'user@domain.com');
 $user->set('_enabled', true);
 
@@ -21,7 +21,7 @@ $user->set('_enabled', true);
 $id = $this->model(Model\User::class)->save($user);
 ```
 
-Fetching an instance of the user model by primary key:
+Fetching an instance of the user entity by primary key:
 ```
 $user = $this->model(Model\User::class)->fetch($id);
 ```
@@ -67,6 +67,10 @@ $users = $this->model(Model\User::class)->query()
     ->isEnabled(true)
     ->hasLoggedSince(strtotime('5 days ago'))
     ->fetch()->all();
+    
+foreach ($users as $user) {
+    echo $user->get('_email');
+}
 ```
 
 Using named queries for consistent results:
