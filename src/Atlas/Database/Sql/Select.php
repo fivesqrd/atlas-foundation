@@ -11,6 +11,8 @@ class Select
 
     protected $_limit;
 
+    protected $_whitelist = array();
+
     public static function factory($alias = null)
     {
         return new self(
@@ -40,9 +42,11 @@ class Select
         return $this->_where->getBoundValues();
     }
 
-    public function join()
+    public function join($local, $foreign, $type = null)
     {
-        return $this->_join;
+        /* Todo: need to whitelist columns */
+        
+        return $this->_join->add($local, $foreign, $type);
     }
 
     public function where()

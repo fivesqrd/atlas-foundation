@@ -5,14 +5,15 @@ class Join
 {
     protected $_stack = array();
 
-    public function inner($table, $alias, $on)
+    public function add($local, $foreign, $type = null)
     {
-        return $this->addToStack($table, $on, $alias);
-    }
+        $on = $this->_getColumnString($local) 
+            . ' = ' 
+            . $this->_getColumnString($foreign);
 
-    public function left($table, $alias, $on)
-    {
-        return $this->addToStack($table, $on, $alias, 'LEFT');
+        return $this->addToStack(
+            $foreign['table'], $foreign['alias'], $on, $type
+        );
     }
 
     public function assemble()
@@ -51,7 +52,7 @@ class Join
         return false;
     }
 
-    private function addToStack($table, $on, $alias = null, $type = null)
+    private function addToStack($table, $alias, $on, $type = null)
     {
         if ($this->isJoined($alias)) {
             return false; /* TODO: figure out the appropriate response */
@@ -93,5 +94,10 @@ class Join
         }
 
         return $join['type'] . ' ';
+    }
+
+    protected function _getColumnString($object)
+    {
+        return $object['alias'] . '.' . $object['column'];
     }
 }
