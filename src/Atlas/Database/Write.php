@@ -23,9 +23,9 @@ class Write
     {
         if ($entity->getId() !== null) {
             $this->update($entity, $column);
+        } else {
+            $this->insert($entity);
         }
-
-        $this->insert($entity);
     
         return $entity->getId();
     }
