@@ -113,7 +113,7 @@ Each model consists of a set of classes. Each class extends a super class, to al
 new models to be created with minimal effort. 
 
 ### Using Canvas ###
-The atlas repo ships with a script to quickly create the scaffolding required for new models.
+The atlas repo ships with a script to quickly create boilerplate classes for new models.
 ```
 php vendor/fivesqrd/atlas/scripts/Canvas.php User
 php vendor/fivesqrd/atlas/scripts/Canvas.php Customer
