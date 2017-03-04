@@ -81,13 +81,13 @@ class Where
     public function isGreaterThan($name, $value, $orEquals = false, $alias = null)
     {
        $op = ($orEquals !== true) ? '>' : '>=';
-       return $this->parseAndStack($name, $op, '?', $value, $alias);
+       return $this->parseAndStack($name, $op, $value, $alias);
     }
 
     public function isLessThan($name, $value, $orEquals = false, $alias = null)
     {
        $op = ($orEquals !== true) ? '<' : '<=';
-       return $this->parseAndStack($name, $op, '?', $value, $alias);
+       return $this->parseAndStack($name, $op, $value, $alias);
     }
     
     public function isBetween($name, $start, $end, $alias = null)
@@ -98,7 +98,7 @@ class Where
     
     public function isLike($name, $value, $alias = null)
     {
-       return $this->parseAndStack($name, 'like', '?', '%' . $value . '%', $alias);
+       return $this->parseAndStack($name, 'like', '%' . $value . '%', $alias);
     }
 
     public function __toString()
