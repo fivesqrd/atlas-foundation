@@ -34,7 +34,7 @@ class Mapper
             array('type' => 'protected', 'name' => '_alias', 'value' => 'null'),
             array('type' => 'protected', 'name' => '_table', 'value' => 'null'),
             array('type' => 'protected', 'name' => '_key', 'value' => '\'id\''),
-            array('type' => 'protected', 'name' => '_map', 'value' => "array(\n        '_id' => 'id'\n    )"),
+            array('type' => 'protected', 'name' => '_map', 'value' => "array(\n        '_id'    => 'id',\n    )"),
             array('type' => 'protected', 'name' => '_readOnly', 'value' => 'array(\'id\')'),
         );
     } 
