@@ -15,6 +15,10 @@ class Delete
 
     public function assemble()
     {
+        if (empty($this->_table)) {
+            throw new Exception('Table name is required');
+        }
+
         return "DELETE FROM {$this->_table}" . $this->where()->assemble();
     }
 
