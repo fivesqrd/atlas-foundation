@@ -32,6 +32,11 @@ abstract class Mapper
     protected function _populate($row)
     {
         $properties = array();
+
+        if ($row === false) {
+            /* no result given */
+            return array();
+        }
         
         foreach($this->_map as $property => $field) {
             if (!array_key_exists($field, $row)) {
