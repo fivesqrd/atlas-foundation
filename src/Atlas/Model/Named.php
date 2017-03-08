@@ -23,7 +23,7 @@ abstract class Named
      * Create new query instance
      * @return Query
      */
-    protected function _query($ignoreEmptyValues = false)
+    protected function _getQuery($ignoreEmptyValues = false)
     {
         return $this->factory->query($this->resolver, $ignoreEmptyValues);
     }

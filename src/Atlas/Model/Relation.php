@@ -16,14 +16,14 @@ abstract class Relation
         $this->entity = $entity;
     }
 
-    protected function _proxy($namespace)
+    protected function _getProxy($namespace)
     {
         return new Proxy(
             $this->factory, new Resolver($namespace)
         );
     }
 
-    protected function _entity()
+    protected function _getEntity()
     {
         return $this->entity;
     }

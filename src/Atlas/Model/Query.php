@@ -74,7 +74,7 @@ abstract class Query
      * Not exposed to user land
      * @return Atlas\Database\Sql\Select
      */ 
-    protected function _select()
+    protected function _getSelect()
     {
         return $this->_select;
     }
