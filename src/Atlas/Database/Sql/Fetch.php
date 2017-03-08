@@ -54,6 +54,10 @@ class Fetch
             $what = $this->_getAlias() . '.*';
         }
 
+        if (!$this->_getTable()) {
+            throw new Exception('Table name is required');
+        }
+
         $from = $this->_getTable() . ' AS ' . $this->_getAlias();
 
         return $this->_select->assemble($what, $from);
