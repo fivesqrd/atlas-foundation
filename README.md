@@ -230,3 +230,5 @@ class MyControllerPlugin
     }
 }
 ```
+
+A Laravel 5 specific package is available here: https://github.com/Five-Squared/Atlas-Laravel
