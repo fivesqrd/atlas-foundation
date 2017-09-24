@@ -23,6 +23,29 @@ abstract class Query
         $this->_mapper = $mapper;
         $this->_select = $select;
     }
+
+    protected function _join($key, array $reference, $type = null)
+    {
+        $resolver = new Database\Resolver(key($reference));
+        $mapper = $resolver->mapper();
+
+        $local = array(
+            'alias'  => $this->_mapper->getAlias(), 
+            'column' => $key
+        ); 
+
+        $foreign = array(
+            'table'  => $mapper->getTable(), 
+            'alias'  => $mapper->getAlias(),
+            'column' => current($reference)
+        ); 
+
+        $this->_select()->join($local, $foreign, $type);
+
+        return $resolver->query(
+            $this->_adapter, $mapper, $this->_select
+        );
+    }
  
     /**
      * @param int $count

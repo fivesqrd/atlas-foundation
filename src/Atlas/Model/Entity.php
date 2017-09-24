@@ -153,16 +153,6 @@ abstract class Entity
         return $vars;
     }
     
-    public function save()
-    {
-        $this->mapper()->save($this);
-    }
-    
-    public function delete()
-    {
-        $this->mapper()->delete($this);
-    }
-    
     public function __clone()
     {
         $this->__startingValues = $this->toArray();

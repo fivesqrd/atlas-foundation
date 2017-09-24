@@ -24,7 +24,6 @@ class SelectTest extends TestCase
 
     public function testWhereClauseIsReturningValidSql()
     {
-
         $this->_select->where()->isEqual('email', 'me@mycompany.com');
 
         $this->assertEquals(
@@ -35,7 +34,10 @@ class SelectTest extends TestCase
 
     public function testJoinIsReturningValidSql()
     {
-        $this->_select->join()->inner('accounts', 'a', 'u.account_id = a.id');
+        $this->_select->join(
+            array('alias'  => 'u','column' => 'account_id'),
+            array('table'  => 'accounts', 'alias'  => 'a','column' => 'id')
+        );
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id';
 
@@ -46,8 +48,16 @@ class SelectTest extends TestCase
 
     public function testMultipleJoinsAreReturningValidSql()
     {
-        $this->_select->join()->inner('accounts', 'a', 'u.account_id = a.id');
-        $this->_select->join()->inner('roles', 'r', 'u.role_id = r.id');
+        $this->_select->join(
+            array('alias'  => 'u','column' => 'account_id'),
+            array('table'  => 'accounts', 'alias'  => 'a','column' => 'id')
+        );
+
+        $this->_select->join(
+            array('alias'  => 'u','column' => 'role_id'),
+            array('table'  => 'roles', 'alias'  => 'r','column' => 'id')
+        );
+
 
         $expected = 'SELECT * FROM users AS u JOIN accounts AS a ON u.account_id = a.id JOIN roles AS r ON u.role_id = r.id';
 

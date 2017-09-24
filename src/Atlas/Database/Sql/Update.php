@@ -18,6 +18,10 @@ class Update
 
     public function assemble()
     {
+        if (empty($this->_table)) {
+            throw new Exception('Table name is required');
+        }
+
         return "UPDATE {$this->_table}" 
             . ' SET ' . $this->_getPlaceholders()
             . $this->where()->assemble();

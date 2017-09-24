@@ -192,13 +192,8 @@ php composer.phar require fivesqrd/atlas:3.0
 ```
 
 ### Canvas ###
-Configure canvas to remember project specific settings, such as path to model classes and namespace:
-```
-cd /myproject
-mkdir .atlas
-cp vendor/fivesqrd/atlas/scripts/.atlas/config.php .atlas/config.php
-vi .atlas/config.php
-```
+
+See https://github.com/Five-Squared/Atlas-Canvas
 
 ### Config ###
 Add the following config to your project:

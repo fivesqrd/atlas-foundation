@@ -17,6 +17,10 @@ class Insert
 
     public function assemble()
     {
+        if (empty($this->_table)) {
+            throw new Exception('Table name is required');
+        }
+
         return "INSERT INTO {$this->_table}" 
             . " ({$this->_getColumns()})"
             . " VALUES ({$this->_getPlaceholders()})";
