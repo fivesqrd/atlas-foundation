@@ -37,17 +37,24 @@ abstract class Collection implements \Iterator, \Countable
 		$this->_objects[$this->_total] = $object;
 		$this->_total++;
 	}
+
+    public function getRowById($id)
+    {
+        $ids = array_column($this->_raw, 'id');
+        $index = array_search($id, $ids);
+        return $this->getRow($index);
+    }
 	
 	public function getRow($no)
 	{
 	    
 		//TODO: lazy loading
 		//if the object already exists return that
-		if (isset($this->_objects[$no])) {
+		if (array_key_exists($no, $this->_objects)) {
 			return $this->_objects[$no];
 		}
 
-		if (isset($this->_raw[$no])) {
+		if (array_key_exists($no, $this->_objects)) {
 			$this->_objects[$no] = $this->_mapper->getEntity($this->_raw[$no]);
 			if (!isset($this->_objects[$no])) {
 			    throw new Exception('Collection could not create object for class ' . $this->getTargetClass());
@@ -98,7 +105,7 @@ abstract class Collection implements \Iterator, \Countable
 	            if (!array_key_exists($key, $row)) {
 	                throw new Exception('Key ' . $key . ' cannot be extracted from row');
 	            }
-	            array_push($extract, $row[$key]);
+	            $extract[$row['id']] = $row[$key];
 	        }
 	        
 	        return $extract;
