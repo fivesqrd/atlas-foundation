@@ -54,7 +54,7 @@ abstract class Collection implements \Iterator, \Countable
 			return $this->_objects[$no];
 		}
 
-		if (array_key_exists($no, $this->_objects)) {
+		if (array_key_exists($no, $this->_raw)) {
 			$this->_objects[$no] = $this->_mapper->getEntity($this->_raw[$no]);
 			if (!isset($this->_objects[$no])) {
 			    throw new Exception('Collection could not create object for class ' . $this->getTargetClass());
