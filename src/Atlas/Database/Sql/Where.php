@@ -149,7 +149,12 @@ class Where
             $prefix = $alias . '.';
         }
 
-        $placeholder = is_array($values) ? '(?)' : '?';
+        if (is_array($values)) {
+            $qs = implode(',', array_fill(0, count($values), '?'));
+            $placeholder = "({$qs})";
+        } else {
+            $placeholder = '?';
+        }
 
         $template =  $prefix . $name . ' ' . $operator . ' ' . $placeholder;
 
