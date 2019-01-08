@@ -53,15 +53,14 @@ abstract class Collection implements \Iterator, \Countable
 	    
 		//TODO: lazy loading
 		//if the object already exists return that
-		if (array_key_exists($no, $this->_objects)) {
-			return $this->_objects[$no];
-		}
+		if (!array_key_exists($no, $this->_objects)) {
 
-		$this->_objects[$no] = $this->_mapper->getEntity($this->_raw[$no]);
-		
-        if (!isset($this->_objects[$no])) {
-		    throw new Exception('Collection could not create object for class ' . $this->getTargetClass());
-		}
+            $this->_objects[$no] = $this->_mapper->getEntity($this->_raw[$no]);
+            
+            if (!isset($this->_objects[$no])) {
+                throw new Exception('Collection could not create object for class ' . $this->getTargetClass());
+            }
+        }
 
 		return $this->_objects[$no];
 	}
@@ -91,7 +90,7 @@ abstract class Collection implements \Iterator, \Countable
 	
 	public function valid()
 	{
-		return (!is_null($this->current()));
+		return $this->current() !== null;
 	}
 	
 	/**
