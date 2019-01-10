@@ -79,23 +79,30 @@ abstract class Query
         return $this->_select;
     }
 
+    protected function _statement()
+    {
+        return new Database\Sql\Statement(
+            $this->_adapter, $this->_mapper->getTable(), $this->_mapper->getAlias(), $this->_select
+        );
+    }
+
     /**
      * Get the SQL template string for debugging queries 
      * @return string 
      */ 
     public function toString()
     {
-        return $this->_select()->assemble();
+        return $this->_statement()->assemble();
     }
 
     /**
      * Get the fetch object to handle the various fetch strategies
-     * @return Atlas\Database\Fetch 
+     * @return Atlas\Database\Hydrate
      */ 
     public function fetch()
     {
-        return new Database\Sql\Fetch(
-            $this->_adapter, $this->_mapper, $this->_select
+        return new Database\Hydrate(
+            $this->_mapper, $this->_statement()
         );
     }
 }

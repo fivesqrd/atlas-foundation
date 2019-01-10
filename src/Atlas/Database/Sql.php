@@ -10,6 +10,13 @@ class Sql
         $this->_adapter = $adapter;
     }
 
+    public function statement($table, $alias, Sql\Select $select)
+    {
+        return new Sql\Statement(
+            $this->_adapter, $table, $alias, $select
+        );
+    }
+
     public function insert($table, $data)
     {
         $this->_execute(
