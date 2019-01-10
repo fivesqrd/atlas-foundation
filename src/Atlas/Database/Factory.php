@@ -41,16 +41,13 @@ class Factory
     {
         $mapper = $resolver->mapper();
 
-        $select = $this->_getSelect($mapper);
-        $select->where()->isEqual('id', $key);
+        $select = $this->_getSelect($mapper)->where()->isEqual('id', $key);
 
         $statement = new Sql\Statement(
             $this->adapter('read'), $mapper->getTable(), $mapper->getAlias(), $select
         );
 
-        return new Hydrate(
-            $this->_mapper, $statement
-        );
+        return new Hydrate($mapper, $statement);
     }
 
     public function relation($resolver, $entity)
