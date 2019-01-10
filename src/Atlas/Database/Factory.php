@@ -32,6 +32,11 @@ class Factory
         );
     }
 
+    public function sql()
+    {
+        return new Sql($this->adapter('write'));
+    }
+
     public function fetch($resolver, $key)
     {
         $mapper = $resolver->mapper();
@@ -70,7 +75,7 @@ class Factory
     public function write($resolver)
     {
         return new Write(
-            $this->adapter('write'), $resolver->mapper() 
+            $this->sql(), $resolver->mapper() 
         );
     }
 

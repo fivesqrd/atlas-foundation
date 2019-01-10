@@ -3,13 +3,13 @@ namespace Atlas\Database;
 
 class Write
 {
-    protected $_adapter;
+    protected $_sql;
 
     protected $_mapper;
 
-    public function __construct($adapter, $mapper)
+    public function __construct($sql, $mapper)
     {
-        $this->_adapter = $adapter;
+        $this->_sql = $sql;
         $this->_mapper = $mapper;
     }
 
@@ -32,14 +32,11 @@ class Write
 
     public function insert($entity)
     {
-        $insert = new Sql\Insert(
-            $this->_mapper->getTable(),
-            $this->_mapper->extract($entity)
+        $id = $this->_sql->insert(
+            $this->_mapper->getTable(), $this->_mapper->extract($entity)
         );
 
-        $result = $this->execute($insert);
-
-        $entity->setId($this->_adapter->lastInsertId());
+        $entity->setId($id);
         $entity->notify('create');
 
         return $entity->getId();
@@ -47,13 +44,12 @@ class Write
 
     public function update($entity, $column)
     {
-        $update = new Sql\Update(
+        $this->_sql->update(
             $this->_mapper->getTable(), 
             $this->_mapper->extract($entity),
             (new Sql\Where())->isEqual($column, $entity->getId())
         );
 
-        $result = $this->execute($update);
         $entity->notify('change');
         
         return $entity->getId();
@@ -66,25 +62,13 @@ class Write
      */
     public function delete($entity, $column = 'id')
     {
-        $delete = new Sql\Delete(
+        $this->_sql->delete(
             $this->_mapper->getTable(),
             (new Sql\Where())->isEqual($column, $entity->getId())
         );
 
-        $result = $this->execute($delete);
         $entity->notify('delete');
 
         return $result;
-    }
-
-    private function execute($sql)
-    {
-        $statement = $this->_adapter->prepare(
-            $sql->assemble()
-        );
-
-        return $statement->execute(
-            $sql->getBoundValues()
-        );
     }
 }
