@@ -44,15 +44,19 @@ class Factory
         $select = $this->_getSelect($mapper);
         $select->where()->isEqual('id', $key);
 
-        return new Sql\Fetch(
-            $this->adapter('read'), $mapper, $select
+        $statement = new Database\Sql\Statement(
+            $this->adapter('read'), $mapper->getTable(), $mapper->getAlias(), $select
+        );
+
+        return new Database\Hydrate(
+            $this->_mapper, $statement
         );
     }
 
     public function relation($resolver, $entity)
     {
         if (is_numeric($entity)) {
-            $entity = $this->fetch($key);
+            $entity = $this->fetch($resolver, $entity)->one();
         }
 
         return $resolver->relation($this, $entity);

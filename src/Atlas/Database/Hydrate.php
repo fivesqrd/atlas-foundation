@@ -24,7 +24,7 @@ class Hydrate
      */
     public function count()
     {
-        $what = "COUNT(distinct {$this->_alias('id')})";
+        $what = "COUNT(distinct {$this->_mapper->getAlias()}.id)";
 
         return $this->_statement->execute($what)->fetchColumn(0);
     }
@@ -35,7 +35,7 @@ class Hydrate
      */
     public function sum($column)
     {
-        $what = "SUM({$this->_alias($column)})";
+        $what = "SUM({$this->_mapper->getAlias()}.$column)";
 
         return $this->_statement->execute($what)->fetchColumn(0);
     }
