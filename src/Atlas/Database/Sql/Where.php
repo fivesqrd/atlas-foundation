@@ -131,6 +131,34 @@ class Where
         return false;
     }
 
+    private function identifier($name)
+    {
+        if (empty($name)) {
+            throw new \Exception('Identifier may not be empty');
+        }
+
+        /*
+         * Check for any prohibted special characters
+         */
+        $prohibted = ['/', '\\', ' '];
+
+        array_walk($prohibted, function($char) use ($name) {
+            if (strstr($name, $char)) {
+                throw new \Exception('Identifier may not contain "/", " " or "\\"');
+            }
+        });
+
+        /*
+         * Escape any lurking backticks
+         */
+        $escaped = str_replace("`", "``", $name);
+
+        /*
+         * Apply the ligit ticks
+         */
+        return "`{$escaped}`";
+    }
+
     private function parseAndStack($name, $operator, $values, $alias = null)
     {
         $prefix = null;
@@ -146,7 +174,7 @@ class Where
 
         if ($alias !== null) {
             /* Generate prefix if alias exists */
-            $prefix = $alias . '.';
+            $prefix = $this->identifier($alias) . '.';
         }
 
         if (is_array($values)) {
@@ -156,7 +184,7 @@ class Where
             $placeholder = '?';
         }
 
-        $template =  $prefix . $name . ' ' . $operator . ' ' . $placeholder;
+        $template =  $prefix . $this->identifier($name) . ' ' . $operator . ' ' . $placeholder;
 
         return $this->addToStack($template, $values);
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Atlas\Database\Sql;
 
+use Atlas\Database\Exception;
+
 class Statement
 {
     /**
@@ -23,26 +25,12 @@ class Statement
      */
     protected $_alias;
 
-    public function __construct($adapter, $table, $alias, $select)
+    public function __construct($adapter, $table, $alias, Select $select)
     {
         $this->_adapter = $adapter;
         $this->_table = $table;
         $this->_alias = $alias;
         $this->_select = $select;
-    }
-
-    protected function _table()
-    {
-        return $this->_table;
-    }
-
-    protected function _alias($identifier = null)
-    {
-        if ($identifier) {
-            return $this->_alias . '.' . $identifier;
-        }
-
-        return $this->_alias;
     }
 
     public function execute($what = null)
@@ -61,15 +49,54 @@ class Statement
     public function assemble($what = null)
     {
         if ($what === null) {
-            $what = $this->_alias('*');
+            $what = $this->alias('*');
         }
 
-        if (!$this->_table()) {
-            throw new Exception('Table name is required');
+        return $this->_select->assemble(
+            $what, $this->table() . ' AS ' . $this->alias()
+        );
+    }
+
+    private function escape($name)
+    {
+        /*
+         * Escape any lurking backticks
+         */
+        $escaped = str_replace("`", "``", $name);
+
+        /*
+         * Apply the ligit ticks
+         */
+        return "`{$escaped}`";
+    }
+
+    private function table()
+    {
+        $name = $this->_table;
+
+        if (empty($name)) {
+            throw new \Exception('Identifier may not be empty');
         }
 
-        $from = $this->_table() . ' AS ' . $this->_alias();
+        if (!preg_match('/^(?![0-9])[A-Za-z0-9_]*$/', $name)) {
+            throw new Exception(
+                'Table may contain only alphanumerics or underscores, and may not begin with a digit'
+            );
+        }
 
-        return $this->_select->assemble($what, $from);
+        return $this->escape($name);
+    }
+
+    private function alias($identifier = null)
+    {
+        if ($identifier && $identifier == '*') {
+            return $this->escape($this->_alias) . '.' . $identifier;
+        }
+
+        if ($identifier) {
+            return $this->escape($this->_alias) . '.' . $this->escape($identifier);
+        }
+
+        return $this->escape($this->_alias);
     }
 }

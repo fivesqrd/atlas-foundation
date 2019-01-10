@@ -19,7 +19,6 @@ class InjectionTest extends TestCase
             ->setMethods(array('getTable','getAlias'))
             ->getMock();
 
-
         $this->_mapper->method('getAlias')->willReturn('u');
         $this->_mapper->method('getTable')->willReturn('users');
         $this->_select = Sql\Select::factory(
@@ -42,20 +41,62 @@ class InjectionTest extends TestCase
         $this->_select->where()
             ->isEqual('email', "me@mycompany.com' OR 1==1");
 
-        $fetch = new Sql\Fetch(
-            $this->_adapter, $this->_mapper, $this->_select
+        $statement = new Sql\Statement(
+            null, 'users', 'u', $this->_select
         ); 
 
-        $string = null;
+        $this->assertEquals(
+            'SELECT `u`.* FROM `users` AS `u` WHERE (`u`.`email` = ?)',
+            $statement->assemble()
+        );
+    }
 
-        ob_start();
-        $fetch->getStatement()->debugDumpParams();
-        $string = ob_get_contents();
-        ob_end_clean();
+    public function testIdentifierIsEscaped()
+    {
+        $this->_select->where()
+            ->isEqual('`email`', "me@mycompany.com' OR 1==1");
+
+        $statement = new Sql\Statement(
+            null, 'users', 'u', $this->_select
+        ); 
 
         $this->assertEquals(
-            'SELECT u.* FROM users AS u WHERE (u.email = ?)',
-            $fetch->getSql()
+            'SELECT `u`.* FROM `users` AS `u` WHERE (`u`.```email``` = ?)',
+            $statement->assemble()
         );
+    }
+
+    public function testTableNameWithDash()
+    {
+        $this->expectException(
+            'Atlas\Database\Exception', 
+            'Table may contain only alphanumerics or underscores, and may not begin with a digit'
+        );
+
+        $this->_select->where()
+            ->isEqual('`email`', "me@mycompany.com' OR 1==1");
+
+        $statement = new Sql\Statement(
+            null, 'user-list', 'u', $this->_select
+        ); 
+
+        $statement->assemble();
+    }
+
+    public function testTableNameBeginningWithNumber()
+    {
+        $this->expectException(
+            'Atlas\Database\Exception', 
+            'Table may contain only alphanumerics or underscores, and may not begin with a digit'
+        );
+
+        $this->_select->where()
+            ->isEqual('`email`', "me@mycompany.com' OR 1==1");
+
+        $statement = new Sql\Statement(
+            null, '0user', 'u', $this->_select
+        ); 
+
+        $statement->assemble();
     }
 }

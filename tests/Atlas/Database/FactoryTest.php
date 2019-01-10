@@ -23,7 +23,7 @@ class FactoryTest extends TestCase
     
     public function testFactoryIsValidatingConfig()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'Atlas\Database\Exception', 
             'Malformed db adapter write config specified'
         );

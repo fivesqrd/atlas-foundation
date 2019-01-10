@@ -1,1 +1,1 @@
-<phpunit colors="true" strict="true" bootstrap="vendor/autoload.php"></phpunit>
+<phpunit colors="true" bootstrap="vendor/autoload.php"></phpunit>

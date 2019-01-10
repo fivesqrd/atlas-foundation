@@ -22,8 +22,7 @@ class InsertTest extends TestCase
         );
 
         $this->assertEquals(
-            array_values($data),
-            $insert->getBoundValues() 
+            array_values($data), $insert->getBoundValues() 
         );
     }
 }

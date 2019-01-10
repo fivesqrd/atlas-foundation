@@ -27,7 +27,7 @@ class SelectTest extends TestCase
         $this->_select->where()->isEqual('email', 'me@mycompany.com');
 
         $this->assertEquals(
-            'SELECT * FROM users WHERE (email = ?)',
+            'SELECT * FROM users WHERE (`email` = ?)',
             $this->_select->assemble('*', 'users')
         );
     }

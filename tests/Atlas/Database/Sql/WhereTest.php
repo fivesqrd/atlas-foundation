@@ -22,7 +22,7 @@ class WhereTest extends TestCase
         $where->isEqual('email', 'me@mycompany.com');
 
         $this->assertEquals(
-            ' WHERE (email = ?)',
+            ' WHERE (`email` = ?)',
             $where->assemble() 
         );
     }
@@ -34,7 +34,7 @@ class WhereTest extends TestCase
         $where->isEqual('email', 'me@mycompany.com', 'u');
 
         $this->assertEquals(
-            ' WHERE (u.email = ?)',
+            ' WHERE (`u`.`email` = ?)',
             $where->assemble() 
         );
     }
@@ -47,7 +47,7 @@ class WhereTest extends TestCase
             ->isEqual('enabled', 1);
 
         $this->assertEquals(
-            ' WHERE (email = ?) AND (enabled = ?)',
+            ' WHERE (`email` = ?) AND (`enabled` = ?)',
             $where->assemble() 
         );
     }
@@ -86,7 +86,7 @@ class WhereTest extends TestCase
             ->and('enabled = ? or login is null', array(0));
 
         $this->assertEquals(
-            ' WHERE (email = ?) AND (enabled = ? or login is null)',
+            ' WHERE (`email` = ?) AND (enabled = ? or login is null)',
             $where->assemble() 
         );
     }
