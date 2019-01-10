@@ -44,11 +44,11 @@ class Factory
         $select = $this->_getSelect($mapper);
         $select->where()->isEqual('id', $key);
 
-        $statement = new Database\Sql\Statement(
+        $statement = new Sql\Statement(
             $this->adapter('read'), $mapper->getTable(), $mapper->getAlias(), $select
         );
 
-        return new Database\Hydrate(
+        return new Hydrate(
             $this->_mapper, $statement
         );
     }
