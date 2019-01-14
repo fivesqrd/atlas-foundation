@@ -112,15 +112,26 @@ $emails = $users->getAllEmailAddresses();
 Each model consists of a set of classes. Each class extends a super class, to allow
 new models to be created with minimal effort. 
 
-### Using Canvas ###
-The atlas repo ships with a script to quickly create boilerplate classes for new models.
+Below is an example what a project with 3 models might look like
 ```
-php vendor/fivesqrd/atlas/scripts/Canvas.php User
-php vendor/fivesqrd/atlas/scripts/Canvas.php Customer
-php vendor/fivesqrd/atlas/scripts/Canvas.php Contact
+|- Model
+   |-- User.php
+   |-- User
+       |-- Entity.php
+       |-- Mapper.php
+       |-- Collection.php
+       |-- Query.php
+       |-- Named.php
+       |-- Relation.php
+   |-- Customer.php
+   |-- Customer
+       ...
+   |-- Content.php
+   |-- Contact
+       ...
 ```
 
-Update the Mapper class with the table details 
+Sample mapper classs 
 ```
 <?php
 namespace Application\Model\User;
@@ -144,7 +155,7 @@ class Mapper extends \Atlas\Model\Mapper
 }
 ```
 
-Update the Entity class with the mapped properties 
+Sample entity class 
 ```
 <?php
 namespace Application\Model\User;
@@ -161,26 +172,10 @@ class Entity extends \Atlas\Model\Entity
 }
 ```
 
-### File Structure ###
-Below is an example what a project with 3 models might look like. For more details, have a look
-at these [examples](https://github.com/christianjburger/Atlas/tree/master/examples/Application/)
-```
-|- Model
-   |-- User.php
-   |-- User
-       |-- Entity.php
-       |-- Mapper.php
-       |-- Collection.php
-       |-- Query.php
-       |-- Named.php
-       |-- Relation.php
-   |-- Customer.php
-   |-- Customer
-       ...
-   |-- Content.php
-   |-- Contact
-       ...
-```
+
+### Using Canvas ###
+The atlas repo ships with a script to quickly create boilerplate classes when a new model needs to be added. See https://github.com/fivesqrd/atlas-canvas
+
 
 ## Install and Setup ##
 
@@ -190,10 +185,6 @@ Via composer
 cd /myproject
 php composer.phar require fivesqrd/atlas:3.0 
 ```
-
-### Canvas ###
-
-See https://github.com/Five-Squared/Atlas-Canvas
 
 ### Config ###
 Add the following config to your project:
@@ -226,4 +217,4 @@ class MyControllerPlugin
 }
 ```
 
-A Laravel 5 specific package is available here: https://github.com/Five-Squared/Atlas-Laravel
+A Laravel 5 specific package is available here: https://github.com/fivesqrd/atlas-laravel
