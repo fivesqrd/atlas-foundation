@@ -46,7 +46,7 @@ class Hydrate
     public function one()
     {
         return $this->_mapper->getEntity(
-            $this->_statement->execute()->fetch()
+            $this->_statement->execute()->fetch(PDO::FETCH_ASSOC)
         );
     }
     
@@ -56,7 +56,7 @@ class Hydrate
     public function all()
     {
         return $this->_mapper->getCollection(
-            $this->_statement->execute()->fetchAll()
+            $this->_statement->execute()->fetchAll(PDO::FETCH_ASSOC)
         );
     }
 }
