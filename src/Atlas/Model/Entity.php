@@ -20,7 +20,11 @@ abstract class Entity
     
     public function getId()
     {
-        return $this->_id;
+        if ($this->_id === null) {
+            return null;
+        }
+
+        return (int) $this->_id;
     }
 
     public function setId($value)
