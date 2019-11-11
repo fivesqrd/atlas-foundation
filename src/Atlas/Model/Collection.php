@@ -130,5 +130,35 @@ abstract class Collection implements \Iterator, \Countable
 	        $model->delete();
 	    }
 	}
+
+    /**
+     * Create a new colleciton containing just items filtered out by the given callback function
+     */
+    public function filter($callback)
+    {
+        $rows = array_filter($this->_raw, $callback);
+
+        return new static(array_values($rows), $this->_mapper);
+    }
+
+    /**
+     * Extract only certain columns from rows
+     */
+    public function expose($keys)
+    {
+        $collection = [];
+
+        foreach ($this->_raw as $row) {
+            
+            $extract = [];
+            foreach ($keys as $key) {
+                $extract[$key] = array_key_exists($key, $row) ? $row[$key] : null;
+            }
+
+            $collection[] = $extract;
+        }
+
+        return $collection;
+    }
 }
 ?>
