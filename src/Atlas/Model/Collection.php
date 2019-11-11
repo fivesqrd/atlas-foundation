@@ -146,19 +146,22 @@ abstract class Collection implements \Iterator, \Countable
      */
     public function expose($keys)
     {
-        $collection = [];
+        return $this->map(function ($row) use ($keys) {
 
-        foreach ($this->_raw as $row) {
-            
             $extract = [];
+
             foreach ($keys as $key) {
                 $extract[$key] = array_key_exists($key, $row) ? $row[$key] : null;
             }
 
-            $collection[] = $extract;
-        }
+            return $extract;
 
-        return $collection;
+        });
+    }
+
+    public function map($callback)
+    {
+        return array_map($callback, $this->_raw);
     }
 }
 ?>
